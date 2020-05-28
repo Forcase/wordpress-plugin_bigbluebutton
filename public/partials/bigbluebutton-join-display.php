@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestream'] == true): ?>
+<div>Live View Player</div>
+	<?php echo get_field('raum_beschreibung'); ?>
+<?php else: ?>
+
 <form id="joinroom" method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>" class="validate">
 	<input type="hidden" name="action" value="join_room">
 	<input id="bbb_join_room_id" type="hidden" name="room_id" value="<?php echo $room_id; ?>">
@@ -43,3 +50,4 @@
 	<?php } ?>
 	<input class="bbb-button" type="submit" class="button button-primary" value="<?php esc_html_e( 'Join', 'bigbluebutton' ); ?>">
 </form>
+<?php endif; ?>
