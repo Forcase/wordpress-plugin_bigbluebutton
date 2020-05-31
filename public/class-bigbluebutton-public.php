@@ -73,6 +73,7 @@ class Bigbluebutton_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/bigbluebutton-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/video-js.css', array(), $this->version, 'all' );
 
 	}
 
@@ -109,6 +110,21 @@ class Bigbluebutton_Public {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/bigbluebutton-public.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( $this->plugin_name, 'php_vars', $translations );
 
+		wp_enqueue_script( $this->plugin_name . '-video-js', plugin_dir_url( __FILE__ ) . 'js/video.js', array( 'jquery' ), $this->version );
+		wp_localize_script($this->plugin_name . '-video-js', 'wp', [
+			'adminUrl' => admin_url( 'admin-post.php' )
+		]);
+	}
+
+	public function send_chat_message()
+	{
+		if(! empty( $_POST['action'] ) && 'send_chat_message' == $_POST['action']) {
+			$message = $_POST['message'];
+			$redis = new Redis();
+			$redis->pconnect('REDIS_HOST'); // REDIS_HOST hast to be the same as in BBB_REDIS_HOST
+			$redis->publish('REDIS_CHANNEL', $message); // REDIS_CHANNEL hast to be the same as in BBB_REDIS_CHANNEL
+			echo "Message published\n";
+		}
 	}
 
 	/**

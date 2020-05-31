@@ -72,7 +72,7 @@ class Bigbluebutton_Public_Room_Api {
 			$return_url          = esc_url( $_POST['REQUEST_URI'] );
 
 			// check if user has entered live view pw
-			if(!empty($_POST['bbb_meeting_access_code']) && $_POST['bbb_meeting_access_code'] === 'livestream') {
+			if(!empty($_POST['bbb_meeting_access_code']) && !empty(get_field('bbb_c_livestreamPW', $room_id)) && $_POST['bbb_meeting_access_code'] === get_field('bbb_c_livestreamPW', $room_id)) {
 				// todo: fix redirect for livestream viewers waiting for moderator
 //				if ( Bigbluebutton_Api::is_meeting_running( $room_id ) ) {
 				if ( true ) {

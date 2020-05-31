@@ -1,8 +1,26 @@
 <?php
 session_start();
 if(isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestream'] == true): ?>
-<div>Live View Player</div>
-	<?php echo get_field('raum_beschreibung'); ?>
+	<h1>Live Stream</h1>
+	<div style="float:left; width:49%">
+		<video id='my-video-live' class="video-js vjs-default-skin" width='760' height='400'>
+			<source src="LIVE_STREAM_URL">
+			<p class='vjs-no-js'>
+				To view this video please enable JavaScript, and consider upgrading to a web browser that
+				<a href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
+			</p>
+		</video>
+	</div>
+	<div id="container" style=" float:right; width:49%">
+		<form method="post" action="" id="contactform">
+			<div class="form-group">
+				<h2 >Send Question</h2>
+				<textarea name="message" rows="15" cols="60" class="form-control" id="message"></textarea>
+			</div>
+			<button type="submit" class="btn btn-primary send-message">Submit</button>
+		</form>
+	</div>
+
 <?php else: ?>
 
 <form id="joinroom" method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>" class="validate">

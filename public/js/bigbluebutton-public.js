@@ -349,4 +349,21 @@
 			});
 		});
 	});
+
+  $(document).ready(function () {
+    $('.send-message').click(function (e) {
+      e.preventDefault();
+      var message = $('#message').val();
+      // todo: fix target URL
+      $.ajax
+      ({
+        type: "POST",
+        url: wp.adminUrl,
+        data: { "message": message, 'action':'send_chat_message' },
+        success: function (data) {
+          $('#contactform')[0].reset();
+        }
+      });
+    });
+  });
 }( jQuery ) );

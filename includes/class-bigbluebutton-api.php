@@ -40,14 +40,126 @@ class Bigbluebutton_Api
 			return 404;
 		}
 
+		// todo: process params from acf
+
 		$name = html_entity_decode(get_the_title($rid));
 		$moderator_code = get_post_meta($rid, 'bbb-room-moderator-code', true);
 		$viewer_code = get_post_meta($rid, 'bbb-room-viewer-code', true);
 		$recordable = get_post_meta($rid, 'bbb-room-recordable', true);
-		$meeting_id = get_post_meta($rid, 'bbb-room-meeting-id', true);
+		$meeting_id = get_field('bbb_meetingID', $rid);
 		$welcome_message = get_field('welcome_message', $rid);
 
-		$arr_params = array(
+		$req_wp_params = [
+		'meetingID' => rawurlencode($meeting_id),
+			'attendeePW' => rawurlencode($viewer_code),
+			'moderatorPW' => rawurlencode($moderator_code),
+		];
+
+		$create_params = [
+			'name',
+			'welcome',
+			'attendeePW',
+			'moderatorPW',
+			'dialNumber',
+			'voiceBridge',
+			'logoutURL',
+			'record',
+			'duration',
+			'freeJoin',
+			'meta',
+			'moderatorOnlyMessage',
+			'autoStartRecording',
+			'allowStartStopRecording',
+			'webcamsOnlyForModerator',
+			'logo',
+			'bannerText',
+			'bannerColor',
+			'copyright',
+			'muteOnStart',
+			'allowModsToUnmuteUsers',
+			'lockSettingsDisableCam',
+			'lockSettingsDisableMic',
+			'lockSettingsDisablePrivateChat',
+			'lockSettingsDisablePublicChat',
+			'lockSettingsDisableNote',
+			'lockSettingsLockedLayout',
+			'lockSettingsLockOnJoin',
+			'lockSettingsLockOnJoinConfigurable',
+			'guestPolicy',
+		];
+
+		$req_create_params = self::get_acf_req_params($rid, $create_params, 'bbb_');
+
+		$config_params = [
+			'defaultMaxUsers',
+			'defaultMeetingDuration',
+			'maxInactivityTimeoutMinutes',
+			'clientLogoutTimerInMinutes',
+			'warnMinutesBeforeMax',
+			'meetingExpireIfNoUserJoinedInMinutes',
+			'meetingExpireWhenLastUserLeftInMinutes',
+			'userInactivityInspectTimerInMinutes',
+			'userInactivityThresholdInMinutes',
+			'userActivitySignResponseDelayInMinutes',
+			'disableRecordingDefault',
+//			'autoStartRecording',
+//			'allowStartStopRecording',
+//			'webcamsOnlyForModerator',
+//			'muteOnStart',
+//			'allowModsToUnmuteUsers',
+			'keepEvents',
+//			'lockSettingsDisableCam',
+//			'lockSettingsDisableMic',
+//			'lockSettingsDisablePrivateChat',
+//			'lockSettingsDisablePublicChat',
+//			'lockSettingsDisableNote',
+//			'lockSettingsLockedLayout',
+//			'lockSettingsLockOnJoin',
+//			'lockSettingsLockOnJoinConfigurable',
+		];
+
+		$req_config_params = self::get_acf_req_params($rid, $config_params, 'bbb_cc_', '');
+
+		$user_params = [
+			// APP
+			'ask_for_feedback_on_logout',
+			'auto_join_audio',
+			'client_title',
+			'force_listen_only',
+			'listen_only_mode',
+			'skip_check_audio',
+			// BRANDING
+			'display_branding_area',
+			// SHORTCUTS
+			'shortcuts',
+			// KURENTO
+			'auto_share_webcam',
+			'preferred_camera_profile',
+			'enable_screen_sharing',
+			'enable_video',
+			'skip_video_preview',
+			// WHITEBOARD
+			'multi_user_pen_only',
+			'presenter_tools',
+			'multi_user_tools',
+			// SKINNING/THEMMING
+			'custom_style',
+			'custom_style_url',
+			// LAYOUT
+			'auto_swap_layout',
+			'hide_presentation',
+			'show_participants_on_login',
+			// OUTSIDE COMMANDS
+			'outside_toggle_self_voice',
+			'outside_toggle_recording',
+		];
+
+		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'user-data-');
+
+		$req_params = array_merge($req_user_params, $req_config_params, $req_create_params, $req_wp_params);
+
+		$url = self::build_url('create', $req_params);
+		/*$arr_params = array(
 			'name' => esc_attr($name),
 			'meetingID' => rawurlencode($meeting_id),
 			'attendeePW' => rawurlencode($viewer_code),
@@ -57,7 +169,7 @@ class Bigbluebutton_Api
 			'welcome' => rawurlencode($welcome_message)
 		);
 
-		$url = self::build_url('create', $arr_params);
+		$url = self::build_url('create', $arr_params);*/
 
 		$full_response = self::get_response($url);
 
@@ -75,6 +187,28 @@ class Bigbluebutton_Api
 
 		return 500;
 
+	}
+
+	public static function get_acf_req_params($room_id, $params, $acf_prefix, $req_prefix='') {
+		$req_params = [];
+		foreach ($params as $param) {
+			$field = get_field_object($acf_prefix . $param, $room_id);
+			if(!$field) {
+				// error
+				continue;
+			}
+			$type = $field['type'];
+			$value = get_field($acf_prefix . $param, $room_id);
+			if(!empty($value) || $type == 'true_false'){
+				if($type == 'url') {
+					$value = esc_url($value);
+				} elseif(is_string($value)) {
+					$value = rawurlencode($value);
+				}
+				$req_params[$req_prefix . $param] = $value;
+			}
+		}
+		return $req_params;
 	}
 
 	/**
@@ -108,7 +242,9 @@ class Bigbluebutton_Api
 			}
 		}
 
-		$meeting_id = get_post_meta($rid, 'bbb-room-meeting-id', true);
+		// todo: add join params
+
+		$meeting_id = get_field('bbb_meetingID', $rid);
 		$arr_params = array(
 			'meetingID' => rawurlencode($meeting_id),
 			'fullName' => $uname,
@@ -137,7 +273,7 @@ class Bigbluebutton_Api
 			return null;
 		}
 
-		$meeting_id = get_post_meta($rid, 'bbb-room-meeting-id', true);
+		$meeting_id = get_field('bbb_meetingID', $rid);
 		$arr_params = array(
 			'meetingID' => rawurlencode($meeting_id),
 		);
