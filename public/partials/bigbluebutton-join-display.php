@@ -22,7 +22,6 @@ if(isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestre
 	</div>
 
 <?php else: ?>
-
 <form id="joinroom" method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>" class="validate">
 	<input type="hidden" name="action" value="join_room">
 	<input id="bbb_join_room_id" type="hidden" name="room_id" value="<?php echo $room_id; ?>">
@@ -31,7 +30,7 @@ if(isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestre
 	<?php if ( ! is_user_logged_in() ) { ?>
 		<div id="bbb_join_with_username" class="bbb-join-form-block">
 			<label id="bbb_meeting_name_label" class="bbb-join-room-label"><?php esc_html_e( 'Name' ); ?>: </label>
-			<input type="text" name="bbb_meeting_username" aria-labelledby="bbb_meeting_name_label" class="bbb-join-room-input">
+			<input type="text" name="bbb_meeting_username" aria-labelledby="bbb_meeting_name_label" class="bbb-join-room-input" <?php echo isset($_REQUEST['username']) ? 'value="'.$_REQUEST['username'].'"' : ''; ?>>
 		</div>
 	<?php } ?>
 	<?php if ( ! $access_as_moderator && ! $access_as_viewer && $access_using_code ) { ?>
@@ -41,12 +40,40 @@ if(isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestre
 	<?php } ?>
 			<label id="bbb_meeting_access_code_label" class="bbb-join-room-label"><?php esc_html_e( 'Access Code', 'bigbluebutton' ); ?>: </label>
 			<input type="text" name="bbb_meeting_access_code" aria-labelledby="bbb_meeting_access_code_label" class="bbb-join-room-input">
+			<label for="bbb_accept_privacy_policy">
+				<input id="bbb_accept_privacy_policy" type="checkbox" name="bbb_accept_privacy_policy" <?php echo isset($_REQUEST['bbb_accept_privacy_policy']) ? 'checked' : ''; ?>>Datenschutz Einverstanden <sup>*</sup>
+			</label>
+			<?php if(get_field('bbb_record', $room_id) || get_field('bbb_autoStartRecording', $room_id)): ?>
+			<label for="bbb_accept_recording_policy">
+				<input id="bbb_accept_recording_policy" type="checkbox" name="bbb_accept_recording_policy" <?php echo isset($_REQUEST['bbb_accept_recording_policy']) ? 'checked' : ''; ?>>Aufzeichnung Einverstanden <sup>*</sup>
+			</label>
+			<?php endif; ?>
+			<?php if(get_field('bbb_ls_enabled', $room_id)): ?>
+			<label for="bbb_accept_livestream_policy">
+				<input id="bbb_accept_livestream_policy" type="checkbox" name="bbb_accept_livestream_policy" <?php echo isset($_REQUEST['bbb_accept_livestream_policy']) ? 'checked' : ''; ?>>Livestream Einverstanden <sup>*</sup>
+			</label>
+			<?php endif; ?>
 		</div>
 		<?php if ( isset( $_REQUEST['password_error'] ) && $_REQUEST['room_id'] == $room_id ) { ?>
 			<div class="bbb-error">
 				<label><?php esc_html_e( 'The access code you have entered is incorrect. Please try again.', 'bigbluebutton' ); ?></label>
 			</div>
 		<?php } ?>
+			<?php if ( isset( $_REQUEST['privacy_policy_error'] ) && $_REQUEST['room_id'] == $room_id ) { ?>
+				<div class="bbb-error">
+					<label><?php esc_html_e( 'Bitte stimmen Sie der Datenschutz Richtlinie zu.', 'bigbluebutton' ); ?></label>
+				</div>
+			<?php } ?>
+			<?php if ( isset( $_REQUEST['recording_policy_error'] ) && $_REQUEST['room_id'] == $room_id ) { ?>
+				<div class="bbb-error">
+					<label><?php esc_html_e( 'Bitte stimmen Sie der Aufzeichnungs Richtlinie zu.', 'bigbluebutton' ); ?></label>
+				</div>
+			<?php } ?>
+			<?php if ( isset( $_REQUEST['livestream_policy_error'] ) && $_REQUEST['room_id'] == $room_id ) { ?>
+				<div class="bbb-error">
+					<label><?php esc_html_e( 'Bitte stimmen Sie der Livestream Richtlinie zu.', 'bigbluebutton' ); ?></label>
+				</div>
+			<?php } ?>
 	<br>
 	<?php if ( isset( $_REQUEST['bigbluebutton_wait_for_mod'] ) && $_REQUEST['room_id'] == $room_id ) { ?>
 		<div class="bbb-join-form-block">
