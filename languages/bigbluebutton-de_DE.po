@@ -1,0 +1,253 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-09-13 10:54-0400\n"
+"PO-Revision-Date: 2020-06-01 21:42+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Admin server settings
+msgid "Rooms"
+msgstr "Räume"
+
+msgid "Room Settings"
+msgstr "Raumeinstellungen"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "The server settings explanation."
+msgstr ""
+
+msgid "EndPoint"
+msgstr ""
+
+msgid "Shared Secret"
+msgstr ""
+
+msgid "Example"
+msgstr "Beispiel"
+
+msgid "Default server settings 1. Default server settings 2."
+msgstr ""
+
+msgid "Save server settings success message."
+msgstr ""
+
+msgid "Save server settings bad url error message."
+msgstr ""
+
+msgid "Save server settings bad server settings error message."
+msgstr ""
+
+# Admin Room settings
+msgid "Add New"
+msgstr "Neuen hinzufügen"
+
+msgid "Add New Room"
+msgstr "Neuen Raum hinzufügen"
+
+msgid "Edit Room"
+msgstr "Raum bearbeiten"
+
+msgid "View Room"
+msgstr "Raum anzeigen"
+
+msgid "View Rooms"
+msgstr "Räume anzeigen"
+
+msgid "Search Rooms"
+msgstr "Räume suchen"
+
+msgid "No rooms found"
+msgstr "Keine Räume gefunden"
+
+msgid "No rooms found in trash"
+msgstr "Keine Räume im Papierkorb gefunden"
+
+msgid "All Rooms"
+msgstr "Alle Räume"
+
+msgid "New Room"
+msgstr "Neuer Raum"
+
+msgid "Room Archives"
+msgstr "Raum Archive"
+
+msgid "Insert into room"
+msgstr "In Raum einfügen"
+
+msgid "Uploaded to this room"
+msgstr "Zu diesem Raum hochgeladen"
+
+msgid "Filter rooms list"
+msgstr "Raumliste filtern"
+
+msgid "Rooms list navigation"
+msgstr "Raumlistennavigation"
+
+msgid "Rooms list"
+msgstr "Raumliste"
+
+msgid "Room published"
+msgstr "Räume veröffentlicht"
+
+msgid "Room published privately"
+msgstr ""
+
+msgid "Room reverted to draft"
+msgstr ""
+
+msgid "Room scheduled"
+msgstr ""
+
+msgid "Room updated"
+msgstr ""
+
+msgid "Moderator Code"
+msgstr "Moderator Zugangscode"
+
+msgid "Viewer Code"
+msgstr "Teilnehmer Zugangscode"
+
+msgid "Recordable"
+msgstr "Aufzeichnung erlauben"
+
+msgid "true"
+msgstr "wahr"
+
+msgid "false"
+msgstr "falsch"
+
+# Room description
+msgid "Join"
+msgstr "Beitreten"
+
+msgid "Wait for Moderator"
+msgstr "Auf den Moderator warten"
+
+# Recordings description
+msgid "Meeting"
+msgstr "Meeting"
+
+msgid "Recording"
+msgstr "Aufnahme"
+
+msgid "Recordings"
+msgstr "Aufnahmen"
+
+msgid "Manage"
+msgstr "Verwalten"
+
+msgid "Expand recordings"
+msgstr "Aufnahmen erweitern"
+
+msgid "Collapse recordings"
+msgstr "Aufnahmen schließen"
+
+msgid "Statistics"
+msgstr "Statistiken"
+
+msgid "Presentation"
+msgstr "Präsentation"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Protected"
+msgstr "Geschützt"
+
+msgid "Unprotected"
+msgstr "Ungeschützt"
+
+# Migration Error Messages
+msgid "Failed to import the room, %s."
+msgstr "Raum %s konnte nicht importiert werden."
+
+msgid "Not all rooms were able to be imported to the new version."
+msgstr "Nicht alle Räume konnten in die neue Version importiert werden."
+
+msgid "Not all room logs were able to be imported to the new version."
+msgstr ""
+
+# Error messages
+msgid "The form has expired or is invalid. Please try again."
+msgstr ""
+"Das Formular is abgelaufen oder ungültig. Bitte versuchen Sie es erneut."
+
+msgid ""
+"You do not have permission to enter the room. Please request permission."
+msgstr ""
+"Sie haben nicht die nötige Berechtigung, um dem Raum beizutreten. Bitte "
+"fordern Sie die Berechtigung an."
+
+msgid "The access code you have entered is incorrect. Please try again."
+msgstr ""
+"Ihr eingegebener Zugangscode ist ungültig. Bitte versuchen Sie es erneut."
+
+msgid ""
+"It is currently not possible to create rooms on the server. Please contact "
+"support for help."
+msgstr ""
+"Es ist derzeit nicht möglich Räume auf diesem Server zu erstellen. Bitte "
+"kontaktieren Sie den Support."
+
+msgid ""
+"BigBlueButton works best with the heartbeat API enabled. Please enable it."
+msgstr ""
+
+msgid "The token: %s is not associated with a published room."
+msgstr "Der Token %s ist nicht mit einem Raum verknüpft."
+
+msgid "The token: %s is not associated with an existing room."
+msgstr "Der Token %s ist nicht mit ienem bestehenden Raum verknüpft."
+
+msgid ""
+"This user does not have permission to display any rooms in a shortcode or "
+"widget."
+msgstr ""
+"Diese Benutzer hat nicht die Berechtigung Räume in Shortcodes oder Widgets "
+"anzuzeigen."
+
+msgid "The room linked to this resource is not configured correctly."
+msgstr ""
+"Der Raum, der mit dieser Ressource verknüpft ist, wurde nicht korrekt "
+"konfiguriert."
+
+# Public strings
+msgid "Access Code"
+msgstr "Zugangscode"
+
+msgid "This room does not currently have any recordings."
+msgstr "Dieser Raum hat derzeit keine Aufnahmen."
+
+msgid ""
+"The meeting has not started yet. You will be automatically redirected to the "
+"meeting when it starts."
+msgstr ""
+"Das Meeting hat noch nicht begonnen. Sie werden automatisch weitergeleitet, "
+"sobald es beginnt."
+
+msgid ""
+"The meeting has not started yet. Please wait for a moderator to start the "
+"meeting before joining."
+msgstr ""
+"Das Meeting hat noch nicht begonnen. Bitte warten Sie auf den Moderator, "
+"bevor Sie dem Meeting beitreten."
+
+# Widget strings
+msgid "Room selection"
+msgstr "Raumauswahl"
+
+msgid "Displays a BigBlueButton login form."
+msgstr ""
+
+msgid "There are no rooms in the selection."
+msgstr ""
