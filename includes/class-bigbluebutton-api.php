@@ -155,8 +155,14 @@ class Bigbluebutton_Api
 
 		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
 
+		$meta1 = [
+		];
+
+		$req_meta1_params = self::get_acf_req_params($rid, $meta1, 'bbb_meta_', 'meta_bbb-');
+
 		$req_params = array_merge($req_user_params, $req_config_params, $req_create_params, [
-			'joinViaHtml5' => 'true'
+			'joinViaHtml5' => 'true',
+			'guest' => get_field('bbb_join_guest', $room_id) ? 'true' : 'false',
 		]);
 
 		$url = self::build_url('create', $req_params);

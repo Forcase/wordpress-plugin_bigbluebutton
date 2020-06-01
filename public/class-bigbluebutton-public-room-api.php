@@ -64,12 +64,13 @@ class Bigbluebutton_Public_Room_Api
 
 			$room_id = $_POST['room_id'];
 			$user = wp_get_current_user();
-			$entry_code = '';
+			$entry_code = isset($_POST['bbb_meeting_access_code']) ? sanitize_text_field($_POST['bbb_meeting_access_code']) : '';
 			$username = $this->get_meeting_username($user);
 //			$moderator_code      = strval( get_post_meta( $room_id, 'bbb-room-moderator-code', true ) );
 			$moderator_code = get_field('bbb_moderatorPW', $room_id);
 //			$viewer_code         = strval( get_post_meta( $room_id, 'bbb-room-viewer-code', true ) );
 			$viewer_code = get_field('bbb_attendeePW', $room_id);
+			$livestream_code = get_field('bbb_ls_livestreamPW', $room_id);
 //			$wait_for_mod        = get_post_meta( $room_id, 'bbb-room-wait-for-moderator', true );
 			$wait_for_mod = get_field('bbb_wp_wait_for_mod', $room_id);
 			$access_using_code = BigBlueButton_Permissions_Helper::user_has_bbb_cap('join_with_access_code_bbb_room');
@@ -77,8 +78,59 @@ class Bigbluebutton_Public_Room_Api
 			$access_as_viewer = BigBlueButton_Permissions_Helper::user_has_bbb_cap('join_as_viewer_bbb_room');
 			$return_url = esc_url($_POST['REQUEST_URI']);
 
+			// check if user has accepted policies
+			$has_error = false;
+			$query = array(
+				'room_id' => $room_id,
+				'username' => $username,
+			);
+
+			if (isset($_REQUEST['bbb_accept_privacy_policy'])) {
+				$query['bbb_accept_privacy_policy'] = $_REQUEST['bbb_accept_privacy_policy'];
+			}
+			if (isset($_REQUEST['bbb_accept_recording_policy'])) {
+				$query['bbb_accept_recording_policy'] = $_REQUEST['bbb_accept_recording_policy'];
+			}
+			if (isset($_REQUEST['bbb_accept_livestream_policy'])) {
+				$query['bbb_accept_livestream_policy'] = $_REQUEST['bbb_accept_livestream_policy'];
+			}
+			if (isset($_REQUEST['join_livestream'])) {
+				$query['join_livestream'] = $_REQUEST['join_livestream'];
+				if ($entry_code !== $livestream_code) {
+					$query['password_error'] = true;
+					$has_error = true;
+				}
+			}
+
+			if (isset($_REQUEST['join_participant'])) {
+				$query['join_participant'] = $_REQUEST['join_participant'];
+				if (get_field('bbb_wp_privacy-policy_required', $room_id) && empty($_POST['bbb_accept_privacy_policy'])) {
+					$query['privacy_policy_error'] = true;
+					$has_error = true;
+				}
+				if (get_field('bbb_wp_recording-policy_required', $room_id) && (get_field('bbb_record', $room_id) || get_field('bbb_autoStartRecording', $room_id)) && empty($_POST['bbb_accept_recording_policy'])) {
+					$query['recording_policy_error'] = true;
+					$has_error = true;
+				}
+				if (get_field('bbb_wp_livestream-policy_required', $room_id) && get_field('bbb_ls_enabled', $room_id) && empty($_POST['bbb_accept_livestream_policy'])) {
+					$query['livestream_policy_error'] = true;
+					$has_error = true;
+				}
+				if ($access_using_code && isset($_POST['bbb_meeting_access_code']) && $entry_code != $moderator_code && $entry_code != $viewer_code) {
+					$query['password_error'] = true;
+					$has_error = true;
+				}
+			}
+
+			if ($has_error) {
+				wp_redirect(add_query_arg($query, $return_url));
+				return;
+			}
+
+
+
 			// check if user has entered live view pw
-			if (!empty($_POST['bbb_meeting_access_code']) && !empty(get_field('bbb_c_livestreamPW', $room_id)) && $_POST['bbb_meeting_access_code'] === get_field('bbb_c_livestreamPW', $room_id)) {
+			if (!empty($_POST['bbb_meeting_access_code']) && !empty($livestream_code) && $_POST['bbb_meeting_access_code'] === $livestream_code) {
 				// todo: implement wait for moderators for livestream viewers
 //				if ( Bigbluebutton_Api::is_meeting_running( $room_id ) ) {
 
@@ -205,6 +257,13 @@ class Bigbluebutton_Public_Room_Api
 					'bigbluebutton_wait_for_mod' => true,
 					'room_id' => $room_id,
 				);
+
+				if (isset($_REQUEST['join_participant'])) {
+					$query['join_participant'] = $_REQUEST['join_participant'];
+				}
+				if (isset($_REQUEST['join_livestream'])) {
+					$query['join_livestream'] = $_REQUEST['join_livestream'];
+				}
 
 				$access_as_viewer = BigBlueButton_Permissions_Helper::user_has_bbb_cap('join_as_viewer_bbb_room');
 				if (!is_user_logged_in()) {
