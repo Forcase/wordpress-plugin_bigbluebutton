@@ -265,14 +265,14 @@ class Bigbluebutton {
 		$this->loader->add_filter( 'parent_file', $plugin_admin, 'bbb_set_current_menu' );
 
 		// Add room metadata hooks.
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_register_custom_types, 'register_room_code_metaboxes' );
+//		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_register_custom_types, 'register_room_code_metaboxes' );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_register_custom_types, 'register_record_room_metabox' );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin_register_custom_types, 'register_wait_for_moderator_metabox' );
 		$this->loader->add_action( 'save_post', $plugin_admin_api, 'save_room' );
 
 		// Show custom fields in rooms table.
-		$this->loader->add_action( 'manage_posts_custom_column', $plugin_admin, 'bbb_room_custom_columns', 10, 2 );
-		$this->loader->add_filter( 'manage_bbb-room_posts_columns', $plugin_admin, 'add_custom_room_column_to_list' );
+//		$this->loader->add_action( 'manage_posts_custom_column', $plugin_admin, 'bbb_room_custom_columns', 10, 2 );
+//		$this->loader->add_filter( 'manage_bbb-room_posts_columns', $plugin_admin, 'add_custom_room_column_to_list' );
 
 		// Add Admin fields
 		$this->loader->add_action('acf/init', $plugin_admin, 'add_acf_fields');
@@ -313,8 +313,8 @@ class Bigbluebutton {
 		$this->loader->add_filter( 'heartbeat_nopriv_received', $plugin_public_room_api, 'bbb_check_meeting_state', 10, 2 );
 
 		// Send Chat
-		$this->loader->add_action( 'admin_post_join_room', $plugin_public_room_api, 'send_chat_message' );
-		$this->loader->add_action( 'admin_post_nopriv_join_room', $plugin_public_room_api, 'send_chat_message' );
+		$this->loader->add_action( 'admin_post_join_room', $plugin_public, 'send_chat_message' );
+		$this->loader->add_action( 'admin_post_nopriv_join_room', $plugin_public, 'send_chat_message' );
 
 		// Manage recording state API.
 		$this->loader->add_action( 'wp_ajax_set_bbb_recording_publish_state', $plugin_public_recording_api, 'set_bbb_recording_publish_state' );

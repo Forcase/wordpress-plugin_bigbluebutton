@@ -49,22 +49,21 @@ class Bigbluebutton_Api
 		$meeting_id = get_field('bbb_meetingID', $rid);
 		$welcome_message = get_field('welcome_message', $rid);
 
-		$req_wp_params = [
-		'meetingID' => rawurlencode($meeting_id),
-			'attendeePW' => rawurlencode($viewer_code),
-			'moderatorPW' => rawurlencode($moderator_code),
-		];
-
 		$create_params = [
+			'meetingID',
 			'name',
 			'welcome',
 			'attendeePW',
 			'moderatorPW',
 			'dialNumber',
 			'voiceBridge',
+			'maxParticipants',
 			'logoutURL',
 			'record',
 			'duration',
+			'isBreakout',
+			'parentMeetingID',
+			'sequence',
 			'freeJoin',
 			'meta',
 			'moderatorOnlyMessage',
@@ -154,9 +153,11 @@ class Bigbluebutton_Api
 			'outside_toggle_recording',
 		];
 
-		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'user-data-');
+		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
 
-		$req_params = array_merge($req_user_params, $req_config_params, $req_create_params, $req_wp_params);
+		$req_params = array_merge($req_user_params, $req_config_params, $req_create_params, [
+			'joinViaHtml5' => 'true'
+		]);
 
 		$url = self::build_url('create', $req_params);
 		/*$arr_params = array(
@@ -204,6 +205,8 @@ class Bigbluebutton_Api
 					$value = esc_url($value);
 				} elseif(is_string($value)) {
 					$value = rawurlencode($value);
+				} elseif(is_bool($value)) {
+					$value = $value ? 'true' : 'false';
 				}
 				$req_params[$req_prefix . $param] = $value;
 			}
@@ -250,6 +253,46 @@ class Bigbluebutton_Api
 			'fullName' => $uname,
 			'password' => rawurlencode($pword),
 		);
+
+		$user_params = [
+			// APP
+			'ask_for_feedback_on_logout',
+			'auto_join_audio',
+			'client_title',
+			'force_listen_only',
+			'listen_only_mode',
+			'skip_check_audio',
+			// BRANDING
+			'display_branding_area',
+			// SHORTCUTS
+			'shortcuts',
+			// KURENTO
+			'auto_share_webcam',
+			'preferred_camera_profile',
+			'enable_screen_sharing',
+			'enable_video',
+			'skip_video_preview',
+			// WHITEBOARD
+			'multi_user_pen_only',
+			'presenter_tools',
+			'multi_user_tools',
+			// SKINNING/THEMMING
+			'custom_style',
+			'custom_style_url',
+			// LAYOUT
+			'auto_swap_layout',
+			'hide_presentation',
+			'show_participants_on_login',
+			// OUTSIDE COMMANDS
+			'outside_toggle_self_voice',
+			'outside_toggle_recording',
+		];
+
+		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
+
+		$arr_params = array_merge($req_user_params, $arr_params, [
+			'joinViaHtml5' => 'true'
+		]);
 
 		$url = self::build_url('join', $arr_params);
 
