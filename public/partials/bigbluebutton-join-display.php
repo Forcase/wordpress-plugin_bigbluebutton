@@ -11,15 +11,16 @@ if (isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestr
 			</p>
 		</video>
 	</div>
-	<div id="container" style=" float:right; width:49%">
-		<form method="post" action="" id="contactform">
-			<div class="form-group">
-				<h2>Send Question</h2>
-				<textarea name="message" rows="15" cols="60" class="form-control" id="message"></textarea>
-			</div>
-			<button type="submit" class="btn btn-primary send-message">Submit</button>
-		</form>
-	</div>
+<!---->
+<!--	<div id="container" style=" float:right; width:49%">-->
+<!--		<form method="post" action="" id="contactform">-->
+<!--			<div class="form-group">-->
+<!--				<h2>Send Question</h2>-->
+<!--				<textarea name="message" rows="15" cols="60" class="form-control" id="message"></textarea>-->
+<!--			</div>-->
+<!--			<button type="submit" class="btn btn-primary send-message">Submit</button>-->
+<!--		</form>-->
+<!--	</div>-->
 
 <?php else: ?>
 	<?php if (get_field('bbb_ls_enabled', $room_id) && empty($_REQUEST['join_participant']) && empty($_REQUEST['join_livestream'])): ?>
