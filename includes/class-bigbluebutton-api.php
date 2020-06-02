@@ -298,6 +298,7 @@ class Bigbluebutton_Api
 
 		$custom_style_params = [];
 
+		// todo: not working as expected
 		if(get_field('bbb_ud_custom_style', $room_id) == false) {
 			$custom_style_params = [
 				'userdata-bbb_custom_style' => 'true',

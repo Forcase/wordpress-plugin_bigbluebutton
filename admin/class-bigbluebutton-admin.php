@@ -2694,15 +2694,7 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 				'type' => 'tab',
 				'instructions' => '',
 				'required' => 0,
-				'conditional_logic' => [
-					[
-						[
-							'field' => 'field_5ed434865dbb9',
-							'operator' => '==',
-							'value' => '0',
-						]
-					]
-				],
+				'conditional_logic' => 0,
 				'wrapper' => array(
 					'width' => '',
 					'class' => '',
