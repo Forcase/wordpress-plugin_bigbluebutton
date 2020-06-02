@@ -33,7 +33,7 @@ $colors = [
 
 foreach ($colors as $var => $value) {
 		$rid = $_GET['rid'] ?? false;
-		echo $var . ': ' . get_field('bbb_' . $var, $rid) ?: $value;
+		echo $var . ': ' . (get_field('bbb_' . $var, $rid) ?: $value) . ";\n" ;
 }
 
 ?>
