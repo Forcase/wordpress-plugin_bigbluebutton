@@ -1,4 +1,7 @@
 <?php
+if(session_id() == ''){
+	session_start();
+}
 if (isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestream'] == true): ?>
 	<h1>Live Stream</h1>
 	<div style="float:left; width:49%">
