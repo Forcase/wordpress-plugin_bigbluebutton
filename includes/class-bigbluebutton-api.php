@@ -296,11 +296,18 @@ class Bigbluebutton_Api
 
 		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
 
-		$arr_params = array_merge($req_user_params, $arr_params, [
+		$custom_style_params = [];
+
+		if(get_field('bbb_ud_custom_style', $room_id) == false) {
+			$custom_style_params = [
+				'userdata-bbb_custom_style' => 'true',
+				'userdata-bbb_custom_style_url' => admin_url('admin-post.php') . '?action=generate_room_css&rid=' . $room_id
+			];
+		}
+
+		$arr_params = array_merge($req_user_params, $arr_params, $custom_style_params, [
 			'joinViaHtml5' => 'true',
 			// Custom Styles
-			'userdata-bbb_custom_style' => 'true',
-			'userdata-bbb_custom_style_url' => admin_url('admin-post.php') . '?action=generate_room_css&rid=' . $room_id
 		]);
 
 		$url = self::build_url('join', $arr_params);
