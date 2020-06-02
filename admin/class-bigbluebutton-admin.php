@@ -343,7 +343,7 @@ class Bigbluebutton_Admin {
 	{
 		if( function_exists('acf_add_local_field_group') ):
 
-			acf_add_local_field_group(array(
+			$fields = array(
 				'key' => 'group_5ed41e5b73a6a',
 				'title' => 'BigBlueButton Room',
 				'fields' => array(
@@ -2639,7 +2639,62 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 				'hide_on_screen' => '',
 				'active' => true,
 				'description' => '',
-			));
+			);
+
+			$colors = [
+				'--color-white' => '#FFF !important',
+				'--color-off-white' => '#eaeef1 !important',
+				'--color-black' => '#000000 !important',
+				'--color-gray' => '#000100 !important',
+				'--color-gray-dark' => '#000100 !important',
+				'--color-gray-light' => '#7e8588 !important',
+				'--color-gray-darkest' => '#0e0f0a !important',
+				'--color-gray-lighter' => '#be1d28 !important',
+				'--color-gray-lightest' => '#d4d7da !important',
+				'--color-blue-light' => '#609ed5 !important',
+				'--color-blue-lighter' => '#a4c4e4 !important',
+				'--color-blue-lightest' => '#eaeff4 !important',
+				'--color-primary' => '#be1d28 !important',
+				'--color-success' => '#1e8252 !important',
+				'--color-danger' => '#d40f14 !important',
+				'--color-warning' => '#70247f !important',
+				'--color-link-hover' => '#457abd !important',
+				'--color-transparent' => 'transparent !important',
+				'--color-white-with-transparency' => '#ffffff40 !important',
+				'--toolbar-list-bg' => '#d8d8da !important',
+				'--toolbar-list-bg-focus' => '#c8ccd0 !important',
+				'--poll-annotation-gray' => '#2d2e2b !important',
+				'--list-item-bg-hover' => '#dce4ed !important',
+				'--poll-blue' => '#306db3 !important',
+				'--poll-stats-border-color' => '#d4d7da !important',
+				'--systemMessage-background-color' => '#f9f9fa !important',
+				'--systemMessage-border-color' => '#c5cace !important',
+				'--background-active' => '#eaeaeb !important',
+			];
+
+			foreach ($colors as $key => $default_value) {
+				$fields['fields'][] = array(
+					'key' => 'field_bbb' . $key,
+					'label' => $key,
+					'name' => 'bbb_' . $key,
+					'type' => 'text',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'default_value' => $default_value,
+					'placeholder' => '',
+					'prepend' => '',
+					'append' => '',
+					'maxlength' => '',
+				);
+			}
+
+			acf_add_local_field_group($fields);
 
 		endif;
 	}
