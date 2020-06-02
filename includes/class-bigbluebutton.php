@@ -335,6 +335,8 @@ class Bigbluebutton {
 
 		// Register widget.
 		$this->loader->add_action( 'widgets_init', $plugin_public, 'register_widget' );
+
+		$this->loader->add_action('init', $plugin_public, 'register_session');
 	}
 
 	/**

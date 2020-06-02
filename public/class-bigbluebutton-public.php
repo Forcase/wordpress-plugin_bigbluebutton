@@ -116,6 +116,13 @@ class Bigbluebutton_Public {
 		]);
 	}
 
+	public function register_session()
+	{
+			if(session_id() == ''){
+				session_start();
+			}
+	}
+
 	public function send_chat_message()
 	{
 		if(! empty( $_POST['action'] ) && 'send_chat_message' == $_POST['action']) {
