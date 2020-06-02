@@ -1,39 +1,39 @@
 :root {
 <?php
 $colors = [
-'--color-white' => '#FFF !important',
-'--color-off-white' => '#eaeef1 !important',
-'--color-black' => '#000000 !important',
-'--color-gray' => '#000100 !important',
-'--color-gray-dark' => '#000100 !important',
-'--color-gray-light' => '#7e8588 !important',
-'--color-gray-darkest' => '#0e0f0a !important',
-'--color-gray-lighter' => '#be1d28 !important',
-'--color-gray-lightest' => '#d4d7da !important',
-'--color-blue-light' => '#609ed5 !important',
-'--color-blue-lighter' => '#a4c4e4 !important',
-'--color-blue-lightest' => '#eaeff4 !important',
-'--color-primary' => '#be1d28 !important',
-'--color-success' => '#1e8252 !important',
-'--color-danger' => '#d40f14 !important',
-'--color-warning' => '#70247f !important',
-'--color-link-hover' => '#457abd !important',
-'--color-transparent' => 'transparent !important',
-'--color-white-with-transparency' => '#ffffff40 !important',
-'--toolbar-list-bg' => '#d8d8da !important',
-'--toolbar-list-bg-focus' => '#c8ccd0 !important',
-'--poll-annotation-gray' => '#2d2e2b !important',
-'--list-item-bg-hover' => '#dce4ed !important',
-'--poll-blue' => '#306db3 !important',
-'--poll-stats-border-color' => '#d4d7da !important',
-'--systemMessage-background-color' => '#f9f9fa !important',
-'--systemMessage-border-color' => '#c5cace !important',
-'--background-active' => '#eaeaeb !important',
+'--color-white' => '#FFF',
+'--color-off-white' => '#eaeef1',
+'--color-black' => '#000000',
+'--color-gray' => '#000100',
+'--color-gray-dark' => '#000100',
+'--color-gray-light' => '#7e8588',
+'--color-gray-darkest' => '#0e0f0a',
+'--color-gray-lighter' => '#be1d28',
+'--color-gray-lightest' => '#d4d7da',
+'--color-blue-light' => '#609ed5',
+'--color-blue-lighter' => '#a4c4e4',
+'--color-blue-lightest' => '#eaeff4',
+'--color-primary' => '#be1d28',
+'--color-success' => '#1e8252',
+'--color-danger' => '#d40f14',
+'--color-warning' => '#70247f',
+'--color-link-hover' => '#457abd',
+'--color-transparent' => 'transparent',
+'--color-white-with-transparency' => '#ffffff40',
+'--toolbar-list-bg' => '#d8d8da',
+'--toolbar-list-bg-focus' => '#c8ccd0',
+'--poll-annotation-gray' => '#2d2e2b',
+'--list-item-bg-hover' => '#dce4ed',
+'--poll-blue' => '#306db3',
+'--poll-stats-border-color' => '#d4d7da',
+'--systemMessage-background-color' => '#f9f9fa',
+'--systemMessage-border-color' => '#c5cace',
+'--background-active' => '#eaeaeb',
 ];
 
 foreach ($colors as $var => $value) {
 		$rid = $_GET['rid'] ?? false;
-		echo $var . ': ' . (get_field('bbb_' . $var, $rid) ?: $value) . ";\n" ;
+		echo $var . ': ' . (get_field('bbb_' . $var, $rid) ?: $value) . " !important;\n" ;
 }
 
 ?>
