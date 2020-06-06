@@ -281,7 +281,6 @@ class Bigbluebutton_Api
 
 		$custom_style_params = [];
 
-		// todo: not working as expected
 		if (get_field('ci_is-picker', $room_id) == true) {
 			$custom_style_params = [
 				'userdata-bbb_custom_style' => 'true',
