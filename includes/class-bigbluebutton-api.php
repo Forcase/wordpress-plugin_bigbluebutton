@@ -49,109 +49,15 @@ class Bigbluebutton_Api
 		$meeting_id = get_field('bbb_meetingID', $rid);
 		$welcome_message = get_field('welcome_message', $rid);
 
-		$create_params = [
-			'meetingID',
-			'name',
-			'welcome',
-			'attendeePW',
-			'moderatorPW',
-			'dialNumber',
-			'voiceBridge',
-			'maxParticipants',
-			'logoutURL',
-			'record',
-			'duration',
-			'isBreakout',
-			'parentMeetingID',
-			'sequence',
-			'freeJoin',
-			'meta',
-			'moderatorOnlyMessage',
-			'autoStartRecording',
-			'allowStartStopRecording',
-			'webcamsOnlyForModerator',
-			'logo',
-			'bannerText',
-			'bannerColor',
-			'copyright',
-			'muteOnStart',
-			'allowModsToUnmuteUsers',
-			'lockSettingsDisableCam',
-			'lockSettingsDisableMic',
-			'lockSettingsDisablePrivateChat',
-			'lockSettingsDisablePublicChat',
-			'lockSettingsDisableNote',
-			'lockSettingsLockedLayout',
-			'lockSettingsLockOnJoin',
-			'lockSettingsLockOnJoinConfigurable',
-			'guestPolicy',
-		];
+		$create_params = self::get_bbb_create_params();
 
 		$req_create_params = self::get_acf_req_params($rid, $create_params, 'bbb_');
 
-		$config_params = [
-			'defaultMaxUsers',
-			'defaultMeetingDuration',
-			'maxInactivityTimeoutMinutes',
-			'clientLogoutTimerInMinutes',
-			'warnMinutesBeforeMax',
-			'meetingExpireIfNoUserJoinedInMinutes',
-			'meetingExpireWhenLastUserLeftInMinutes',
-			'userInactivityInspectTimerInMinutes',
-			'userInactivityThresholdInMinutes',
-			'userActivitySignResponseDelayInMinutes',
-			'disableRecordingDefault',
-//			'autoStartRecording',
-//			'allowStartStopRecording',
-//			'webcamsOnlyForModerator',
-//			'muteOnStart',
-//			'allowModsToUnmuteUsers',
-			'keepEvents',
-//			'lockSettingsDisableCam',
-//			'lockSettingsDisableMic',
-//			'lockSettingsDisablePrivateChat',
-//			'lockSettingsDisablePublicChat',
-//			'lockSettingsDisableNote',
-//			'lockSettingsLockedLayout',
-//			'lockSettingsLockOnJoin',
-//			'lockSettingsLockOnJoinConfigurable',
-		];
+		$config_params = self::get_bbb_config_params();
 
 		$req_config_params = self::get_acf_req_params($rid, $config_params, 'bbb_cc_', '');
 
-		$user_params = [
-			// APP
-			'ask_for_feedback_on_logout',
-			'auto_join_audio',
-			'client_title',
-			'force_listen_only',
-			'listen_only_mode',
-			'skip_check_audio',
-			// BRANDING
-			'display_branding_area',
-			// SHORTCUTS
-			'shortcuts',
-			// KURENTO
-			'auto_share_webcam',
-			'preferred_camera_profile',
-			'enable_screen_sharing',
-			'enable_video',
-			'skip_video_preview',
-			// WHITEBOARD
-			'multi_user_pen_only',
-			'presenter_tools',
-			'multi_user_tools',
-			// SKINNING/THEMMING
-			'custom_style',
-			'custom_style_url',
-			// LAYOUT
-			'auto_swap_layout',
-			'hide_presentation',
-			'show_participants_on_login',
-			// OUTSIDE COMMANDS
-			'outside_toggle_self_voice',
-			'outside_toggle_recording',
-		];
+		$user_params = self::get_bbb_user_params();
 
 		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
 
@@ -220,6 +126,112 @@ class Bigbluebutton_Api
 		return $req_params;
 	}
 
+	public static function get_bbb_user_params() {
+		return [
+			// APP
+			'ask_for_feedback_on_logout',
+			'auto_join_audio',
+			'client_title',
+			'force_listen_only',
+			'listen_only_mode',
+			'skip_check_audio',
+			// BRANDING
+			'display_branding_area',
+			// SHORTCUTS
+			'shortcuts',
+			// KURENTO
+			'auto_share_webcam',
+			'preferred_camera_profile',
+			'enable_screen_sharing',
+			'enable_video',
+			'skip_video_preview',
+			// WHITEBOARD
+			'multi_user_pen_only',
+			'presenter_tools',
+			'multi_user_tools',
+			// SKINNING/THEMMING
+			'custom_style',
+			'custom_style_url',
+			// LAYOUT
+			'auto_swap_layout',
+			'hide_presentation',
+			'show_participants_on_login',
+			// OUTSIDE COMMANDS
+			'outside_toggle_self_voice',
+			'outside_toggle_recording',
+		];
+	}
+
+	public static function get_bbb_create_params() {
+		return [
+			'meetingID',
+			'name',
+			'welcome',
+			'attendeePW',
+			'moderatorPW',
+			'dialNumber',
+			'voiceBridge',
+			'maxParticipants',
+			'logoutURL',
+			'record',
+			'duration',
+			'isBreakout',
+			'parentMeetingID',
+			'sequence',
+			'freeJoin',
+			'meta',
+			'moderatorOnlyMessage',
+			'autoStartRecording',
+			'allowStartStopRecording',
+			'webcamsOnlyForModerator',
+			'logo',
+			'bannerText',
+			'bannerColor',
+			'copyright',
+			'muteOnStart',
+			'allowModsToUnmuteUsers',
+			'lockSettingsDisableCam',
+			'lockSettingsDisableMic',
+			'lockSettingsDisablePrivateChat',
+			'lockSettingsDisablePublicChat',
+			'lockSettingsDisableNote',
+			'lockSettingsLockedLayout',
+			'lockSettingsLockOnJoin',
+			'lockSettingsLockOnJoinConfigurable',
+			'guestPolicy',
+		];
+	}
+
+	public static function get_bbb_config_params() {
+		return [
+			'defaultMaxUsers',
+			'defaultMeetingDuration',
+			'maxInactivityTimeoutMinutes',
+			'clientLogoutTimerInMinutes',
+			'warnMinutesBeforeMax',
+			'meetingExpireIfNoUserJoinedInMinutes',
+			'meetingExpireWhenLastUserLeftInMinutes',
+			'userInactivityInspectTimerInMinutes',
+			'userInactivityThresholdInMinutes',
+			'userActivitySignResponseDelayInMinutes',
+			'disableRecordingDefault',
+//			'autoStartRecording',
+//			'allowStartStopRecording',
+//			'webcamsOnlyForModerator',
+//			'muteOnStart',
+//			'allowModsToUnmuteUsers',
+			'keepEvents',
+//			'lockSettingsDisableCam',
+//			'lockSettingsDisableMic',
+//			'lockSettingsDisablePrivateChat',
+//			'lockSettingsDisablePublicChat',
+//			'lockSettingsDisableNote',
+//			'lockSettingsLockedLayout',
+//			'lockSettingsLockOnJoin',
+//			'lockSettingsLockOnJoinConfigurable',
+		];
+	}
+
 	/**
 	 * Join meeting.
 	 *
@@ -260,39 +272,7 @@ class Bigbluebutton_Api
 			'password' => rawurlencode($pword),
 		);
 
-		$user_params = [
-			// APP
-			'ask_for_feedback_on_logout',
-			'auto_join_audio',
-			'client_title',
-			'force_listen_only',
-			'listen_only_mode',
-			'skip_check_audio',
-			// BRANDING
-			'display_branding_area',
-			// SHORTCUTS
-			'shortcuts',
-			// KURENTO
-			'auto_share_webcam',
-			'preferred_camera_profile',
-			'enable_screen_sharing',
-			'enable_video',
-			'skip_video_preview',
-			// WHITEBOARD
-			'multi_user_pen_only',
-			'presenter_tools',
-			'multi_user_tools',
-			// SKINNING/THEMMING
-			'custom_style',
-			'custom_style_url',
-			// LAYOUT
-			'auto_swap_layout',
-			'hide_presentation',
-			'show_participants_on_login',
-			// OUTSIDE COMMANDS
-			'outside_toggle_self_voice',
-			'outside_toggle_recording',
-		];
+		$user_params = self::get_bbb_user_params();
 
 		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
 
