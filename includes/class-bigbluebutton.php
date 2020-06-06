@@ -313,8 +313,12 @@ class Bigbluebutton {
 		$this->loader->add_filter( 'heartbeat_nopriv_received', $plugin_public_room_api, 'bbb_check_meeting_state', 10, 2 );
 
 		// Send Chat
-		$this->loader->add_action( 'admin_post_join_room', $plugin_public, 'send_chat_message' );
-		$this->loader->add_action( 'admin_post_nopriv_join_room', $plugin_public, 'send_chat_message' );
+		$this->loader->add_action( 'admin_post_send_chat', $plugin_public, 'send_chat_message' );
+		$this->loader->add_action( 'admin_post_nopriv_send_chat', $plugin_public, 'send_chat_message' );
+
+		// Generate CSS
+		$this->loader->add_action( 'admin_post_generate_room_css', $plugin_public, 'generate_room_css' );
+		$this->loader->add_action( 'admin_post_generate_room_css', $plugin_public, 'generate_room_css' );
 
 		// Manage recording state API.
 		$this->loader->add_action( 'wp_ajax_set_bbb_recording_publish_state', $plugin_public_recording_api, 'set_bbb_recording_publish_state' );

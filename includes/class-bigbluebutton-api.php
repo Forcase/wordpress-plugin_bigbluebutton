@@ -40,16 +40,127 @@ class Bigbluebutton_Api
 			return 404;
 		}
 
-		// todo: process params from acf
+		$create_params = self::get_bbb_create_params();
 
-		$name = html_entity_decode(get_the_title($rid));
-		$moderator_code = get_post_meta($rid, 'bbb-room-moderator-code', true);
-		$viewer_code = get_post_meta($rid, 'bbb-room-viewer-code', true);
-		$recordable = get_post_meta($rid, 'bbb-room-recordable', true);
-		$meeting_id = get_field('bbb_meetingID', $rid);
-		$welcome_message = get_field('welcome_message', $rid);
+		$req_create_params = self::get_acf_req_params($rid, $create_params, 'bbb_');
 
-		$create_params = [
+		$config_params = self::get_bbb_config_params();
+
+		// not sure yet how to use these
+//		$req_config_params = self::get_acf_req_params($rid, $config_params, 'bbb_cc_', '');
+		$req_config_params = [];
+
+		$user_params = self::get_bbb_user_params();
+
+		// probably only needed on join
+//		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
+		$req_user_params = [];
+
+		$meta_params = self::get_bbb_meta_params();
+
+		$req_meta_params = self::get_acf_req_params($rid, $meta_params, 'bbb_meta_', 'meta_bbb-');
+
+		$req_params = array_merge($req_user_params, $req_config_params, $req_meta_params, $req_create_params, [
+			'joinViaHtml5' => 'true',
+			'guest' => get_field('bbb_join_guest', $room_id) ? 'true' : 'false',
+		]);
+
+		$url = self::build_url('create', $req_params);
+		/*$arr_params = array(
+			'name' => esc_attr($name),
+			'meetingID' => rawurlencode($meeting_id),
+			'attendeePW' => rawurlencode($viewer_code),
+			'moderatorPW' => rawurlencode($moderator_code),
+			'logoutURL' => esc_url($logout_url),
+			'record' => $recordable,
+			'welcome' => rawurlencode($welcome_message)
+		);
+
+		$url = self::build_url('create', $arr_params);*/
+
+		$full_response = self::get_response($url);
+
+		if (is_wp_error($full_response)) {
+			return 404;
+		}
+
+		$response = self::response_to_xml($full_response);
+
+		if (property_exists($response, 'returncode') && 'SUCCESS' == $response->returncode) {
+			return 200;
+		} elseif (property_exists($response, 'returncode') && 'FAILURE' == $response->returncode) {
+			return 403;
+		}
+
+		return 500;
+
+	}
+
+	public static function get_acf_req_params($room_id, $params, $acf_prefix, $req_prefix = '')
+	{
+		$req_params = [];
+		foreach ($params as $param) {
+			$field = get_field_object($acf_prefix . $param, $room_id);
+			if (!$field) {
+				// error
+				continue;
+			}
+			$type = $field['type'];
+			$value = get_field($acf_prefix . $param, $room_id);
+			if (!empty($value) || $type == 'true_false') {
+				if ($type == 'url') {
+					$value = esc_url($value);
+				} elseif (is_string($value)) {
+					$value = rawurlencode($value);
+				} elseif (is_bool($value)) {
+					$value = $value ? 'true' : 'false';
+				}
+				$req_params[$req_prefix . $param] = $value;
+			}
+		}
+		return $req_params;
+	}
+
+	public static function get_bbb_user_params()
+	{
+		return [
+			// APP
+			'ask_for_feedback_on_logout',
+			'auto_join_audio',
+			'client_title',
+			'force_listen_only',
+			'listen_only_mode',
+			'skip_check_audio',
+			// BRANDING
+			'display_branding_area',
+			// SHORTCUTS
+			'shortcuts',
+			// KURENTO
+			'auto_share_webcam',
+			'preferred_camera_profile',
+			'enable_screen_sharing',
+			'enable_video',
+			'skip_video_preview',
+			// WHITEBOARD
+			'multi_user_pen_only',
+			'presenter_tools',
+			'multi_user_tools',
+			// SKINNING/THEMMING
+			'custom_style',
+			'custom_style_url',
+			// LAYOUT
+			'auto_swap_layout',
+			'hide_presentation',
+			'show_participants_on_login',
+			// OUTSIDE COMMANDS
+			'outside_toggle_self_voice',
+			'outside_toggle_recording',
+		];
+	}
+
+	public static function get_bbb_create_params()
+	{
+		return [
 			'meetingID',
 			'name',
 			'welcome',
@@ -86,10 +197,11 @@ class Bigbluebutton_Api
 			'lockSettingsLockOnJoinConfigurable',
 			'guestPolicy',
 		];
+	}
 
-		$req_create_params = self::get_acf_req_params($rid, $create_params, 'bbb_');
-
-		$config_params = [
+	public static function get_bbb_config_params()
+	{
+		return [
 			'defaultMaxUsers',
 			'defaultMeetingDuration',
 			'maxInactivityTimeoutMinutes',
@@ -116,108 +228,11 @@ class Bigbluebutton_Api
 //			'lockSettingsLockOnJoin',
 //			'lockSettingsLockOnJoinConfigurable',
 		];
-
-		$req_config_params = self::get_acf_req_params($rid, $config_params, 'bbb_cc_', '');
-
-		$user_params = [
-			// APP
-			'ask_for_feedback_on_logout',
-			'auto_join_audio',
-			'client_title',
-			'force_listen_only',
-			'listen_only_mode',
-			'skip_check_audio',
-			// BRANDING
-			'display_branding_area',
-			// SHORTCUTS
-			'shortcuts',
-			// KURENTO
-			'auto_share_webcam',
-			'preferred_camera_profile',
-			'enable_screen_sharing',
-			'enable_video',
-			'skip_video_preview',
-			// WHITEBOARD
-			'multi_user_pen_only',
-			'presenter_tools',
-			'multi_user_tools',
-			// SKINNING/THEMMING
-			'custom_style',
-			'custom_style_url',
-			// LAYOUT
-			'auto_swap_layout',
-			'hide_presentation',
-			'show_participants_on_login',
-			// OUTSIDE COMMANDS
-			'outside_toggle_self_voice',
-			'outside_toggle_recording',
-		];
-
-		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
-
-		$meta1 = [
-		];
-
-		$req_meta1_params = self::get_acf_req_params($rid, $meta1, 'bbb_meta_', 'meta_bbb-');
-
-		$req_params = array_merge($req_user_params, $req_config_params, $req_create_params, [
-			'joinViaHtml5' => 'true',
-			'guest' => get_field('bbb_join_guest', $room_id) ? 'true' : 'false',
-		]);
-
-		$url = self::build_url('create', $req_params);
-		/*$arr_params = array(
-			'name' => esc_attr($name),
-			'meetingID' => rawurlencode($meeting_id),
-			'attendeePW' => rawurlencode($viewer_code),
-			'moderatorPW' => rawurlencode($moderator_code),
-			'logoutURL' => esc_url($logout_url),
-			'record' => $recordable,
-			'welcome' => rawurlencode($welcome_message)
-		);
-
-		$url = self::build_url('create', $arr_params);*/
-
-		$full_response = self::get_response($url);
-
-		if (is_wp_error($full_response)) {
-			return 404;
-		}
-
-		$response = self::response_to_xml($full_response);
-
-		if (property_exists($response, 'returncode') && 'SUCCESS' == $response->returncode) {
-			return 200;
-		} elseif (property_exists($response, 'returncode') && 'FAILURE' == $response->returncode) {
-			return 403;
-		}
-
-		return 500;
-
 	}
 
-	public static function get_acf_req_params($room_id, $params, $acf_prefix, $req_prefix='') {
-		$req_params = [];
-		foreach ($params as $param) {
-			$field = get_field_object($acf_prefix . $param, $room_id);
-			if(!$field) {
-				// error
-				continue;
-			}
-			$type = $field['type'];
-			$value = get_field($acf_prefix . $param, $room_id);
-			if(!empty($value) || $type == 'true_false'){
-				if($type == 'url') {
-					$value = esc_url($value);
-				} elseif(is_string($value)) {
-					$value = rawurlencode($value);
-				} elseif(is_bool($value)) {
-					$value = $value ? 'true' : 'false';
-				}
-				$req_params[$req_prefix . $param] = $value;
-			}
-		}
-		return $req_params;
+	public static function get_bbb_meta_params()
+	{
+		return [];
 	}
 
 	/**
@@ -260,44 +275,22 @@ class Bigbluebutton_Api
 			'password' => rawurlencode($pword),
 		);
 
-		$user_params = [
-			// APP
-			'ask_for_feedback_on_logout',
-			'auto_join_audio',
-			'client_title',
-			'force_listen_only',
-			'listen_only_mode',
-			'skip_check_audio',
-			// BRANDING
-			'display_branding_area',
-			// SHORTCUTS
-			'shortcuts',
-			// KURENTO
-			'auto_share_webcam',
-			'preferred_camera_profile',
-			'enable_screen_sharing',
-			'enable_video',
-			'skip_video_preview',
-			// WHITEBOARD
-			'multi_user_pen_only',
-			'presenter_tools',
-			'multi_user_tools',
-			// SKINNING/THEMMING
-			'custom_style',
-			'custom_style_url',
-			// LAYOUT
-			'auto_swap_layout',
-			'hide_presentation',
-			'show_participants_on_login',
-			// OUTSIDE COMMANDS
-			'outside_toggle_self_voice',
-			'outside_toggle_recording',
-		];
+		$user_params = self::get_bbb_user_params();
 
 		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
 
-		$arr_params = array_merge($req_user_params, $arr_params, [
-			'joinViaHtml5' => 'true'
+		$custom_style_params = [];
+
+		if (get_field('ci_is-picker', $room_id) == true) {
+			$custom_style_params = [
+				'userdata-bbb_custom_style' => 'true',
+				'userdata-bbb_custom_style_url' => admin_url('admin-post.php') . '?action=generate_room_css&rid=' . $room_id
+			];
+		}
+
+		$arr_params = array_merge($req_user_params, $arr_params, $custom_style_params, [
+			'joinViaHtml5' => 'true',
+			// Custom Styles
 		]);
 
 		$url = self::build_url('join', $arr_params);

@@ -134,6 +134,12 @@ class Bigbluebutton_Public {
 		}
 	}
 
+	public function generate_room_css()
+	{
+		header("Content-type: text/css");
+		require 'bigbluebutton-styles.css.php';
+	}
+
 	/**
 	 * Enqueues dashicon icons for use on front end.
 	 *

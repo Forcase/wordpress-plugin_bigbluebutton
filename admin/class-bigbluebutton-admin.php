@@ -343,7 +343,7 @@ class Bigbluebutton_Admin {
 	{
 		if( function_exists('acf_add_local_field_group') ):
 
-			acf_add_local_field_group(array(
+			$fields = array(
 				'key' => 'group_5ed41e5b73a6a',
 				'title' => 'BigBlueButton Room',
 				'fields' => array(
@@ -389,11 +389,11 @@ class Bigbluebutton_Admin {
 						'type' => 'text',
 						'instructions' => 'Eine Besprechungs-ID, die zur Identifizierung dieser Besprechung durch die 3rd-Party-Anwendung verwendet werden kann.
 
-Diese muss für den Server, den Sie anrufen, eindeutig sein: Verschiedene aktive Besprechungen können nicht dieselbe Besprechungs-ID haben.
+				Diese muss für den Server, den Sie anrufen, eindeutig sein: Verschiedene aktive Besprechungen können nicht dieselbe Besprechungs-ID haben.
 
-Wenn Sie eine nicht eindeutige Besprechungs-ID angeben (es läuft bereits eine Besprechung mit derselben Besprechungs-ID), dann ist der Aufruf zum Erstellen erfolgreich, wenn die anderen Parameter im Aufruf zum Erstellen identisch sind (in der Antwort wird jedoch eine Warnmeldung angezeigt). Der Erstellungsaufruf ist idempotent: mehrmaliges Aufrufen hat keine Nebenwirkung. Auf diese Weise kann eine Drittanbieter-Anwendung die Überprüfung vermeiden, ob die Besprechung läuft, und immer vor dem Beitritt zu jedem Benutzer einen Anruf erstellen.
+				Wenn Sie eine nicht eindeutige Besprechungs-ID angeben (es läuft bereits eine Besprechung mit derselben Besprechungs-ID), dann ist der Aufruf zum Erstellen erfolgreich, wenn die anderen Parameter im Aufruf zum Erstellen identisch sind (in der Antwort wird jedoch eine Warnmeldung angezeigt). Der Erstellungsaufruf ist idempotent: mehrmaliges Aufrufen hat keine Nebenwirkung. Auf diese Weise kann eine Drittanbieter-Anwendung die Überprüfung vermeiden, ob die Besprechung läuft, und immer vor dem Beitritt zu jedem Benutzer einen Anruf erstellen.
 
-Besprechungs-IDs sollten nur ASCII-Groß-/Kleinbuchstaben, Zahlen, Bindestriche oder Unterstriche enthalten. Eine gute Wahl für die Besprechungs-ID ist es, einen GUID-Wert zu generieren, da dies alles garantiert, dass verschiedene Besprechungen nicht die gleiche Besprechungs-ID haben.',
+				Besprechungs-IDs sollten nur ASCII-Groß-/Kleinbuchstaben, Zahlen, Bindestriche oder Unterstriche enthalten. Eine gute Wahl für die Besprechungs-ID ist es, einen GUID-Wert zu generieren, da dies alles garantiert, dass verschiedene Besprechungen nicht die gleiche Besprechungs-ID haben.',
 						'required' => 1,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -470,8 +470,8 @@ Besprechungs-IDs sollten nur ASCII-Groß-/Kleinbuchstaben, Zahlen, Bindestriche 
 						'name' => 'bbb_welcome',
 						'type' => 'wysiwyg',
 						'instructions' => 'Eine Begrüßungsnachricht, die im Chat-Fenster angezeigt wird, wenn der Teilnehmer beitritt. Sie können Schlüsselwörter einschließen (%%CONFNAME%%%, %%DIALNUM%%%, %%CONFNUM%%%), die automatisch ersetzt werden.
-Dieser Parameter setzt die StandardeinstellungWelcomeMessage in bigbluebutton.properties außer Kraft.
-Die Begrüßungsnachricht hat eine begrenzte Unterstützung für HTML-Formatierung. Seien Sie vorsichtig mit dem Kopieren/Einfügen von HTML aus z.B. MS Word, da es leicht die maximal unterstützte URL-Länge überschreiten kann, wenn es bei einer GET-Anfrage verwendet wird.',
+				Dieser Parameter setzt die StandardeinstellungWelcomeMessage in bigbluebutton.properties außer Kraft.
+				Die Begrüßungsnachricht hat eine begrenzte Unterstützung für HTML-Formatierung. Seien Sie vorsichtig mit dem Kopieren/Einfügen von HTML aus z.B. MS Word, da es leicht die maximal unterstützte URL-Länge überschreiten kann, wenn es bei einer GET-Anfrage verwendet wird.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -481,11 +481,11 @@ Die Begrüßungsnachricht hat eine begrenzte Unterstützung für HTML-Formatieru
 						),
 						'default_value' => 'Herzlich willkommen zu %%CONFNAME%%!
 
-Um der Konferenz per Audio beizutreten, klicken Sie auf den Telefon-Button. Verwenden Sie ein Headset, um Hintergrundgeräusche für andere zu vermeiden.
+				Um der Konferenz per Audio beizutreten, klicken Sie auf den Telefon-Button. Verwenden Sie ein Headset, um Hintergrundgeräusche für andere zu vermeiden.
 
-Falls Sie Hilfe bei der Verwendung dieser Videokonferenz benötigen, klicken Sie <a href="https://quorato.de/" target="_blank" rel="noopener">hier</a>.
+				Falls Sie Hilfe bei der Verwendung dieser Videokonferenz benötigen, klicken Sie <a href="https://quorato.de/" target="_blank" rel="noopener">hier</a>.
 
-Diese Konferenz wird bereitgetellt von <a href="https://quorato.de/" target="_blank" rel="noopener">quorato</a> mit der Software <a href="https://bigbluebutton.org/" target="_blank" rel="noopener">BigBlueButton</a>.',
+				Diese Konferenz wird bereitgetellt von <a href="https://quorato.de/" target="_blank" rel="noopener">quorato</a> mit der Software <a href="https://bigbluebutton.org/" target="_blank" rel="noopener">BigBlueButton</a>.',
 						'tabs' => 'all',
 						'toolbar' => 'basic',
 						'media_upload' => 0,
@@ -498,7 +498,7 @@ Diese Konferenz wird bereitgetellt von <a href="https://quorato.de/" target="_bl
 						'type' => 'wysiwyg',
 						'instructions' => 'Anzeige einer Nachricht an alle Moderatoren im öffentlichen Chat.
 
-Der Wert wird auf die gleiche Weise interpretiert wie der Begrüßungsparameter.',
+				Der Wert wird auf die gleiche Weise interpretiert wie der Begrüßungsparameter.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -507,7 +507,7 @@ Der Wert wird auf die gleiche Weise interpretiert wie der Begrüßungsparameter.
 							'id' => '',
 						),
 						'default_value' => 'Sie sind Moderator dieser Konferenz.
-Bitte holen Sie sich Feedback bei den Benutzern',
+				Bitte holen Sie sich Feedback bei den Benutzern',
 						'tabs' => 'all',
 						'toolbar' => 'basic',
 						'media_upload' => 0,
@@ -546,11 +546,11 @@ Bitte holen Sie sich Feedback bei den Benutzern',
 						'type' => 'number',
 						'instructions' => 'Nummer der Sprachkonferenz für die FreeSWITCH-Sprachkonferenz im Zusammenhang mit dieser Sitzung. Dies muss eine 5-stellige Nummer im Bereich 10000 bis 99999 sein. Wenn Sie Ihrem BigBlueButton-Server eine Telefonnummer hinzufügen, legt dieser Parameter die persönliche Identifikationsnummer (PIN) fest, zu deren Eingabe FreeSWITCH einen Nur-Telefon-Benutzer auffordert. Wenn Sie diesen Bereich ändern möchten, bearbeiten Sie den FreeSWITCH-Wahlplan und defaultNumDigitsForTelVoice von bigbluebutton.properties.
 
-Die VoiceBridge-Nummer muss für jede Besprechung unterschiedlich sein.
+				Die VoiceBridge-Nummer muss für jede Besprechung unterschiedlich sein.
 
-Dieser Parameter ist optional. Wenn Sie keine voiceBridge-Nummer angeben, weist BigBlueButton eine zufällige, nicht verwendete Nummer für das Meeting zu.
+				Dieser Parameter ist optional. Wenn Sie keine voiceBridge-Nummer angeben, weist BigBlueButton eine zufällige, nicht verwendete Nummer für das Meeting zu.
 
-Wenn Sie eine VoiceBridge-Nummer übergeben, dann müssen Sie sicherstellen, dass jede Besprechung eine eindeutige VoiceBridge-Nummer hat; andernfalls führt die Wiederverwendung derselben VoiceBridge-Nummer für zwei verschiedene Besprechungen dazu, dass Benutzer aus der einen Besprechung als Telefonbenutzer in der anderen Besprechung erscheinen, was für Benutzer in beiden Besprechungen sehr verwirrend ist.',
+				Wenn Sie eine VoiceBridge-Nummer übergeben, dann müssen Sie sicherstellen, dass jede Besprechung eine eindeutige VoiceBridge-Nummer hat; andernfalls führt die Wiederverwendung derselben VoiceBridge-Nummer für zwei verschiedene Besprechungen dazu, dass Benutzer aus der einen Besprechung als Telefonbenutzer in der anderen Besprechung erscheinen, was für Benutzer in beiden Besprechungen sehr verwirrend ist.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -609,7 +609,7 @@ Wenn Sie eine VoiceBridge-Nummer übergeben, dann müssen Sie sicherstellen, das
 						'type' => 'true_false',
 						'instructions' => 'Die Einstellung \'record=true\' weist den BigBlueButton-Server an, die Medien und Ereignisse in der Sitzung für die spätere Wiedergabe aufzuzeichnen. Die Voreinstellung ist falsch.
 
-Damit eine Wiedergabedatei erzeugt werden kann, muss ein Moderator während der Sitzung mindestens einmal auf die Schaltfläche Start/Stop Recording klicken; andernfalls werden die Aufnahme- und Wiedergabeskripte, wenn keine Aufnahmemarkierungen vorhanden sind, keine Wiedergabedatei erzeugen. Siehe auch die Parameter autoStartRecording und allowStartStopRecording in bigbluebutton.properties.',
+				Damit eine Wiedergabedatei erzeugt werden kann, muss ein Moderator während der Sitzung mindestens einmal auf die Schaltfläche Start/Stop Recording klicken; andernfalls werden die Aufnahme- und Wiedergabeskripte, wenn keine Aufnahmemarkierungen vorhanden sind, keine Wiedergabedatei erzeugen. Siehe auch die Parameter autoStartRecording und allowStartStopRecording in bigbluebutton.properties.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -630,8 +630,8 @@ Damit eine Wiedergabedatei erzeugt werden kann, muss ein Moderator während der 
 						'type' => 'true_false',
 						'instructions' => 'Ob die Aufzeichnung automatisch gestartet werden soll, wenn der erste Benutzer beitritt (Voreinstellung falsch).
 
-Wenn dieser Parameter wahr ist, wird die Aufnahme-UI in BigBlueButton anfänglich aktiv sein. Moderatoren in der Sitzung können die Aufzeichnung immer noch mit der UI-Steuerung pausieren und neu starten.<br/
-HINWEIS: Übergeben Sie autoStartRecording=false nicht und erlauben SieStartStopRecording=false - der Moderator kann dann die Aufzeichnung nicht starten!',
+				Wenn dieser Parameter wahr ist, wird die Aufnahme-UI in BigBlueButton anfänglich aktiv sein. Moderatoren in der Sitzung können die Aufzeichnung immer noch mit der UI-Steuerung pausieren und neu starten.<br/
+				HINWEIS: Übergeben Sie autoStartRecording=false nicht und erlauben SieStartStopRecording=false - der Moderator kann dann die Aufzeichnung nicht starten!',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -652,7 +652,7 @@ HINWEIS: Übergeben Sie autoStartRecording=false nicht und erlauben SieStartStop
 						'type' => 'true_false',
 						'instructions' => 'Erlauben Sie dem Benutzer, die Aufzeichnung zu starten/stoppen. (Voreinstellung true)
 
-Wenn Sie sowohl allowStartStopRecording=false als auch autoStartRecording=true setzen, dann wird die gesamte Länge der Sitzung aufgezeichnet, und die Moderatoren in der Sitzung können die Aufzeichnung nicht anhalten/fortsetzen.',
+				Wenn Sie sowohl allowStartStopRecording=false als auch autoStartRecording=true setzen, dann wird die gesamte Länge der Sitzung aufgezeichnet, und die Moderatoren in der Sitzung können die Aufzeichnung nicht anhalten/fortsetzen.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -673,9 +673,9 @@ Wenn Sie sowohl allowStartStopRecording=false als auch autoStartRecording=true s
 						'type' => 'range',
 						'instructions' => 'Die maximale Dauer (in Minuten) für die Sitzung.
 
-Normalerweise beendet der BigBlueButton-Server die Besprechung, wenn entweder (a) die letzte Person die Besprechung verlässt (es dauert ein oder zwei Minuten, bis der Server die Besprechung aus dem Speicher löscht) oder wenn der Server eine End-API-Anforderung mit der zugehörigen MeetingID erhält (jeder wird gekickt und die Besprechung wird sofort aus dem Speicher gelöscht).
+				Normalerweise beendet der BigBlueButton-Server die Besprechung, wenn entweder (a) die letzte Person die Besprechung verlässt (es dauert ein oder zwei Minuten, bis der Server die Besprechung aus dem Speicher löscht) oder wenn der Server eine End-API-Anforderung mit der zugehörigen MeetingID erhält (jeder wird gekickt und die Besprechung wird sofort aus dem Speicher gelöscht).
 
-BigBlueButton beginnt mit der Verfolgung der Länge einer Besprechung, wenn diese erstellt wird. Wenn die Dauer einen Wert ungleich Null enthält, beendet der Server die Besprechung sofort, wenn die Länge der Besprechung den Wert der Dauer überschreitet (entspricht dem Empfang einer End-API-Anforderung zu diesem Zeitpunkt).',
+				BigBlueButton beginnt mit der Verfolgung der Länge einer Besprechung, wenn diese erstellt wird. Wenn die Dauer einen Wert ungleich Null enthält, beendet der Server die Besprechung sofort, wenn die Länge der Besprechung den Wert der Dauer überschreitet (entspricht dem Empfang einer End-API-Anforderung zu diesem Zeitpunkt).',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1069,8 +1069,8 @@ BigBlueButton beginnt mit der Verfolgung der Länge einer Besprechung, wenn dies
 						'name' => 'bbb_guestPolicy',
 						'type' => 'select',
 						'instructions' => 'Standard-Gast-Richtlinie:
-Legt die Gästerichtlinie für die Besprechung fest. Die Guest-Richtlinie legt fest, ob Benutzer, die eine Beitrittsanfrage mit guest=true senden, der Besprechung beitreten dürfen oder nicht.
-Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
+				Legt die Gästerichtlinie für die Besprechung fest. Die Guest-Richtlinie legt fest, ob Benutzer, die eine Beitrittsanfrage mit guest=true senden, der Besprechung beitreten dürfen oder nicht.
+				Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1484,8 +1484,8 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 						'name' => 'bbb_cc_disableRecordingDefault',
 						'type' => 'true_false',
 						'instructions' => 'Die Aufzeichnung ist standardmäßig deaktiviert:
-- true: nicht aufzeichnen, auch wenn der Parameter record param im api-Aufruf auf Aufzeichnung eingestellt ist
-- false: wenn ein Datensatz-Param von api übergeben wird, überschreiben Sie diese Vorgabe',
+				- true: nicht aufzeichnen, auch wenn der Parameter record param im api-Aufruf auf Aufzeichnung eingestellt ist
+				- false: wenn ein Datensatz-Param von api übergeben wird, überschreiben Sie diese Vorgabe',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1856,30 +1856,6 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 						'ui' => 1,
 						'ui_on_text' => '',
 						'ui_off_text' => '',
-					),
-					array(
-						'key' => 'field_5ed435145dbba',
-						'label' => 'custom_style_url',
-						'name' => 'bbb_ud_custom_style_url',
-						'type' => 'url',
-						'instructions' => '',
-						'required' => 0,
-						'conditional_logic' => array(
-							array(
-								array(
-									'field' => 'field_5ed434865dbb9',
-									'operator' => '==',
-									'value' => '1',
-								),
-							),
-						),
-						'wrapper' => array(
-							'width' => '',
-							'class' => '',
-							'id' => '',
-						),
-						'default_value' => 'https://forcase.de/BBB/Forcase.css',
-						'placeholder' => 'https://forcase.de/BBB/Forcase.css',
 					),
 					array(
 						'key' => 'field_5ed451e5de2f3',
@@ -2639,7 +2615,159 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 				'hide_on_screen' => '',
 				'active' => true,
 				'description' => '',
-			));
+			);
+
+
+			$colors = [
+				'--color-white' => '#FFF',
+				'--color-off-white' => '#eaeef1',
+				'--color-black' => '#000000',
+				'--color-gray' => '#000100',
+				'--color-gray-dark' => '#000100',
+				'--color-gray-light' => '#7e8588',
+				'--color-gray-darkest' => '#0e0f0a',
+				'--color-gray-lighter' => '#be1d28',
+				'--color-gray-lightest' => '#d4d7da',
+				'--color-blue-light' => '#609ed5',
+				'--color-blue-lighter' => '#a4c4e4',
+				'--color-blue-lightest' => '#eaeff4',
+				'--color-primary' => '#be1d28',
+				'--color-success' => '#1e8252',
+				'--color-danger' => '#d40f14',
+				'--color-warning' => '#70247f',
+				'--color-link-hover' => '#457abd',
+				'--color-transparent' => 'transparent',
+				'--color-white-with-transparency' => '#ffffff40',
+				'--toolbar-list-bg' => '#d8d8da',
+				'--toolbar-list-bg-focus' => '#c8ccd0',
+				'--poll-annotation-gray' => '#2d2e2b',
+				'--list-item-bg-hover' => '#dce4ed',
+				'--poll-blue' => '#306db3',
+				'--poll-stats-border-color' => '#d4d7da',
+				'--systemMessage-background-color' => '#f9f9fa',
+				'--systemMessage-border-color' => '#c5cace',
+				'--background-active' => '#eaeaeb',
+			];
+
+			$fields['fields'][] = array(
+				'key' => 'field_bbb_colors_tab',
+				'label' => 'White Label',
+				'name' => '',
+				'type' => 'tab',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_5ed434865dbb9',
+							'operator' => '==',
+							'value' => '1',
+						),
+					),
+				),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'placement' => 'top',
+				'endpoint' => 0,
+			);
+
+			$fields['fields'][] = array(
+				'key' => 'field_bbb_is_picker',
+				'label' => 'is-picker',
+				'name' => 'ci_is-picker',
+				'type' => 'true_false',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_5ed434865dbb9',
+							'operator' => '==',
+							'value' => '1',
+						),
+					),
+				),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'message' => '',
+				'default_value' => 0,
+				'ui' => 1,
+				'ui_on_text' => 'Live',
+				'ui_off_text' => 'Datei',
+			);
+
+			$fields['fields'][] = array(
+				'key' => 'field_bbb_custom_style_url',
+				'label' => 'custom_style_url',
+				'name' => 'bbb_ud_custom_style_url',
+				'type' => 'url',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_5ed434865dbb9',
+							'operator' => '==',
+							'value' => '1',
+						),
+						array(
+							'field' => 'field_bbb_is_picker',
+							'operator' => '!=',
+							'value' => '1',
+						),
+					),
+				),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => 'https://forcase.de/BBB/Forcase.css',
+				'placeholder' => 'https://forcase.de/BBB/Forcase.css',
+			);
+
+			foreach ($colors as $key => $default_value) {
+				$fields['fields'][] = array(
+					'key' => 'field_bbb' . $key,
+					'label' => $key,
+					'name' => 'bbb_' . $key,
+					'type' => 'extended-color-picker',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => array(
+						array(
+							array(
+								'field' => 'field_5ed434865dbb9',
+								'operator' => '==',
+								'value' => '1',
+							),
+							array(
+								'field' => 'field_bbb_is_picker',
+								'operator' => '==',
+								'value' => '1',
+							),
+						),
+					),
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'default_value' => $default_value,
+					'placeholder' => '',
+					'prepend' => '',
+					'append' => '',
+					'maxlength' => '',
+				);
+			}
+
+			acf_add_local_field_group($fields);
 
 		endif;
 	}
