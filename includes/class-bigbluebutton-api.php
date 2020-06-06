@@ -299,7 +299,7 @@ class Bigbluebutton_Api
 		$custom_style_params = [];
 
 		// todo: not working as expected
-		if(get_field('bbb_ud_custom_style', $room_id) == false) {
+		if(get_field('ci_is-picker', $room_id) == true) {
 			$custom_style_params = [
 				'userdata-bbb_custom_style' => 'true',
 				'userdata-bbb_custom_style_url' => admin_url('admin-post.php') . '?action=generate_room_css&rid=' . $room_id
