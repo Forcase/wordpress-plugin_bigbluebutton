@@ -19,15 +19,14 @@
  * @subpackage Bigbluebutton/admin
  * @author     Blindside Networks <contact@blindsidenetworks.com>
  */
-class Bigbluebutton_Admin
-{
+class Bigbluebutton_Admin {
 
 	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    3.0.0
 	 * @access   private
-	 * @var      string $plugin_name The ID of this plugin.
+	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
 	private $plugin_name;
 
@@ -36,22 +35,21 @@ class Bigbluebutton_Admin
 	 *
 	 * @since    3.0.0
 	 * @access   private
-	 * @var      string $version The current version of this plugin.
+	 * @var      string    $version    The current version of this plugin.
 	 */
 	private $version;
 
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @param String $plugin_name The name of this plugin.
-	 * @param String $version The version of this plugin.
 	 * @since   3.0.0
+	 * @param   String $plugin_name       The name of this plugin.
+	 * @param   String $version           The version of this plugin.
 	 */
-	public function __construct($plugin_name, $version)
-	{
+	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 
 	}
 
@@ -60,8 +58,7 @@ class Bigbluebutton_Admin
 	 *
 	 * @since    3.0.0
 	 */
-	public function enqueue_styles()
-	{
+	public function enqueue_styles() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -75,7 +72,7 @@ class Bigbluebutton_Admin
 		 * class.
 		 */
 
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/bigbluebutton-admin.css', array(), $this->version, 'all');
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/bigbluebutton-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -84,8 +81,7 @@ class Bigbluebutton_Admin
 	 *
 	 * @since    3.0.0
 	 */
-	public function enqueue_scripts()
-	{
+	public function enqueue_scripts() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -100,10 +96,10 @@ class Bigbluebutton_Admin
 		 */
 
 		$translations = array(
-			'ajax_url' => admin_url('admin-ajax.php'),
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
 		);
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/bigbluebutton-admin.js', array('jquery'), $this->version, false);
-		wp_localize_script($this->plugin_name, 'php_vars', $translations);
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/bigbluebutton-admin.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( $this->plugin_name, 'php_vars', $translations );
 	}
 
 	/**
@@ -111,42 +107,40 @@ class Bigbluebutton_Admin
 	 *
 	 * @since   3.0.0
 	 */
-	public function create_admin_menu()
-	{
+	public function create_admin_menu() {
 		add_menu_page(
-			__('Rooms', 'bigbluebutton'), __('Rooms', 'bigbluebutton'), 'activate_plugins', 'bbb_room',
+			__( 'Rooms', 'bigbluebutton' ), __( 'Rooms', 'bigbluebutton' ), 'activate_plugins', 'bbb_room',
 			'', 'dashicons-video-alt2'
 		);
 
-		if (current_user_can('manage_categories')) {
+		if ( current_user_can( 'manage_categories' ) ) {
 			add_submenu_page(
-				'bbb_room', __('Rooms', 'bigbluebutton'), __('Categories'), 'activate_plugins',
+				'bbb_room', __( 'Rooms', 'bigbluebutton' ), __( 'Categories' ), 'activate_plugins',
 				'edit-tags.php?taxonomy=bbb-room-category', ''
 			);
 		}
 
 		add_submenu_page(
-			'bbb_room', __('Rooms', 'bigbluebutton'), __('Settings'), 'activate_plugins',
-			'bbb-room-server-settings', array($this, 'display_room_server_settings')
+			'bbb_room', __( 'Rooms', 'bigbluebutton' ), __( 'Settings' ), 'activate_plugins',
+			'bbb-room-server-settings', array( $this, 'display_room_server_settings' )
 		);
 	}
 
 	/**
 	 * Add filter to highlight custom menu category submenu.
 	 *
-	 * @param String $parent_file Current parent page that the user is on.
-	 * @return  String $parent_file    Custom menu slug.
 	 * @since   3.0.0
 	 *
+	 * @param   String $parent_file    Current parent page that the user is on.
+	 * @return  String $parent_file    Custom menu slug.
 	 */
-	public function bbb_set_current_menu($parent_file)
-	{
+	public function bbb_set_current_menu( $parent_file ) {
 		global $submenu_file, $current_screen, $pagenow;
 
 		// Set the submenu as active/current while anywhere in your Custom Post Type.
-		if ('bbb-room-category' == $current_screen->taxonomy && 'edit-tags.php' == $pagenow) {
+		if ( 'bbb-room-category' == $current_screen->taxonomy && 'edit-tags.php' == $pagenow ) {
 			$submenu_file = 'edit-tags.php?taxonomy=bbb-room-category';
-			$parent_file = 'bbb_room';
+			$parent_file  = 'bbb_room';
 		}
 		return $parent_file;
 	}
@@ -154,22 +148,21 @@ class Bigbluebutton_Admin
 	/**
 	 * Add custom room column headers to rooms list table.
 	 *
-	 * @param Array $columns Array of existing column headers.
-	 * @return  Array $columns    Array of existing column headers and custom column headers.
 	 * @since   3.0.0
 	 *
+	 * @param   Array $columns    Array of existing column headers.
+	 * @return  Array $columns    Array of existing column headers and custom column headers.
 	 */
-	public function add_custom_room_column_to_list($columns)
-	{
+	public function add_custom_room_column_to_list( $columns ) {
 		$custom_columns = array(
-			'category' => __('Category'),
-			'permalink' => __('Permalink'),
-			'token' => __('Token', 'bigbluebutton'),
-			'moderator-code' => __('Moderator Code', 'bigbluebutton'),
-			'viewer-code' => __('Viewer Code', 'bigbluebutton'),
+			'category'       => __( 'Category' ),
+			'permalink'      => __( 'Permalink' ),
+			'token'          => __( 'Token', 'bigbluebutton' ),
+			'moderator-code' => __( 'Moderator Code', 'bigbluebutton' ),
+			'viewer-code'    => __( 'Viewer Code', 'bigbluebutton' ),
 		);
 
-		$columns = array_merge($columns, $custom_columns);
+		$columns = array_merge( $columns, $custom_columns );
 
 		return $columns;
 	}
@@ -177,37 +170,36 @@ class Bigbluebutton_Admin
 	/**
 	 * Fill in custom column information on rooms list table.
 	 *
-	 * @param String $column Name of the column.
-	 * @param Integer $post_id Room ID of the current room.
 	 * @since 3.0.0
 	 *
+	 * @param   String  $column     Name of the column.
+	 * @param   Integer $post_id    Room ID of the current room.
 	 */
-	public function bbb_room_custom_columns($column, $post_id)
-	{
-		switch ($column) {
+	public function bbb_room_custom_columns( $column, $post_id ) {
+		switch ( $column ) {
 			case 'category':
-				$categories = wp_get_object_terms($post_id, 'bbb-room-category', array('fields' => 'names'));
-				if (!is_wp_error($categories)) {
-					echo esc_attr(implode(', ', $categories));
+				$categories = wp_get_object_terms( $post_id, 'bbb-room-category', array( 'fields' => 'names' ) );
+				if ( ! is_wp_error( $categories ) ) {
+					echo esc_attr( implode( ', ', $categories ) );
 				}
 				break;
 			case 'permalink':
-				$permalink = (get_permalink($post_id) ? get_permalink($post_id) : '');
-				echo '<a href="' . esc_url($permalink) . '" target="_blank">' . esc_url($permalink) . '</a>';
+				$permalink = ( get_permalink( $post_id ) ? get_permalink( $post_id ) : '' );
+				echo '<a href="' . esc_url( $permalink ) . '" target="_blank">' . esc_url( $permalink ) . '</a>';
 				break;
 			case 'token':
-				if (metadata_exists('post', $post_id, 'bbb-room-token')) {
-					$token = get_post_meta($post_id, 'bbb-room-token', true);
+				if ( metadata_exists( 'post', $post_id, 'bbb-room-token' ) ) {
+					$token = get_post_meta( $post_id, 'bbb-room-token', true );
 				} else {
-					$token = 'z' . esc_attr($post_id);
+					$token = 'z' . esc_attr( $post_id );
 				}
-				echo esc_attr($token);
+				echo esc_attr( $token );
 				break;
 			case 'moderator-code':
-				echo esc_attr(get_post_meta($post_id, 'bbb-room-moderator-code', true));
+				echo esc_attr( get_post_meta( $post_id, 'bbb-room-moderator-code', true ) );
 				break;
 			case 'viewer-code':
-				echo esc_attr(get_post_meta($post_id, 'bbb-room-viewer-code', true));
+				echo esc_attr( get_post_meta( $post_id, 'bbb-room-viewer-code', true ) );
 				break;
 		}
 	}
@@ -217,27 +209,25 @@ class Bigbluebutton_Admin
 	 *
 	 * @since   3.0.0
 	 */
-	public function display_room_server_settings()
-	{
+	public function display_room_server_settings() {
 		$change_success = $this->room_server_settings_change();
-		$bbb_settings = $this->fetch_room_server_settings();
-		$meta_nonce = wp_create_nonce('bbb_edit_server_settings_meta_nonce');
+		$bbb_settings   = $this->fetch_room_server_settings();
+		$meta_nonce     = wp_create_nonce( 'bbb_edit_server_settings_meta_nonce' );
 		require_once 'partials/bigbluebutton-settings-display.php';
 	}
 
 	/**
 	 * Retrieve the room server settings.
 	 *
-	 * @return  Array   $settings   Room server default and current settings.
 	 * @since   3.0.0
 	 *
+	 * @return  Array   $settings   Room server default and current settings.
 	 */
-	public function fetch_room_server_settings()
-	{
+	public function fetch_room_server_settings() {
 		$settings = array(
-			'bbb_url' => get_option('bigbluebutton_url', 'http://test-install.blindsidenetworks.com/bigbluebutton/'),
-			'bbb_salt' => get_option('bigbluebutton_salt', '8cd8ef52e8e101574e400365b55e11a6'),
-			'bbb_default_url' => 'http://test-install.blindsidenetworks.com/bigbluebutton/',
+			'bbb_url'          => get_option( 'bigbluebutton_url', 'http://test-install.blindsidenetworks.com/bigbluebutton/' ),
+			'bbb_salt'         => get_option( 'bigbluebutton_salt', '8cd8ef52e8e101574e400365b55e11a6' ),
+			'bbb_default_url'  => 'http://test-install.blindsidenetworks.com/bigbluebutton/',
 			'bbb_default_salt' => '8cd8ef52e8e101574e400365b55e11a6',
 		);
 
@@ -247,36 +237,34 @@ class Bigbluebutton_Admin
 	/**
 	 * Show information about new plugin updates.
 	 *
-	 * @param Array $current_plugin_metadata The plugin metadata of the current version of the plugin.
-	 * @param Object $new_plugin_metadata The plugin metadata of the new version of the plugin.
 	 * @since   1.4.6
 	 *
+	 * @param   Array  $current_plugin_metadata    The plugin metadata of the current version of the plugin.
+	 * @param   Object $new_plugin_metadata        The plugin metadata of the new version of the plugin.
 	 */
-	public function bigbluebutton_show_upgrade_notification($current_plugin_metadata, $new_plugin_metadata = null)
-	{
-		if (!$new_plugin_metadata) {
-			$new_plugin_metadata = $this->bigbluebutton_update_metadata($current_plugin_metadata['slug']);
+	public function bigbluebutton_show_upgrade_notification( $current_plugin_metadata, $new_plugin_metadata = null ) {
+		if ( ! $new_plugin_metadata ) {
+			$new_plugin_metadata = $this->bigbluebutton_update_metadata( $current_plugin_metadata['slug'] );
 		}
 		// Check "upgrade_notice".
-		if (isset($new_plugin_metadata->upgrade_notice) && strlen(trim($new_plugin_metadata->upgrade_notice)) > 0) {
+		if ( isset( $new_plugin_metadata->upgrade_notice ) && strlen( trim( $new_plugin_metadata->upgrade_notice ) ) > 0 ) {
 			echo '<div style="background-color: #d54e21; padding: 10px; color: #f9f9f9; margin-top: 10px"><strong>Important Upgrade Notice:</strong> ';
-			echo esc_html(strip_tags($new_plugin_metadata->upgrade_notice)), '</div>';
+			echo esc_html( strip_tags( $new_plugin_metadata->upgrade_notice ) ), '</div>';
 		}
 	}
 
 	/**
 	 * Get information about the newest plugin version.
 	 *
-	 * @param String $plugin_slug The slug of the old plugin version.
-	 * @return  Object $new_plugin_metadata    The metadata of the new plugin version.
 	 * @since   1.4.6
 	 *
+	 * @param   String $plugin_slug            The slug of the old plugin version.
+	 * @return  Object $new_plugin_metadata    The metadata of the new plugin version.
 	 */
-	private function bigbluebutton_update_metadata($plugin_slug)
-	{
+	private function bigbluebutton_update_metadata( $plugin_slug ) {
 		$plugin_updates = get_plugin_updates();
-		foreach ($plugin_updates as $update) {
-			if ($update->update->slug === $plugin_slug) {
+		foreach ( $plugin_updates as $update ) {
+			if ( $update->update->slug === $plugin_slug ) {
 				return $update->update;
 			}
 		}
@@ -285,32 +273,31 @@ class Bigbluebutton_Admin
 	/**
 	 * Check for room server settings change requests.
 	 *
+	 * @since   3.0.0
+	 *
 	 * @return  Integer 1|2|3   If the room servers have been changed or not.
 	 *                          0 - failure
 	 *                          1 - success
 	 *                          2 - bad url format
 	 *                          3 - bad bigbluebutton settings configuration
-	 * @since   3.0.0
-	 *
 	 */
-	private function room_server_settings_change()
-	{
-		if (!empty($_POST['action']) && 'bbb_general_settings' == $_POST['action'] && wp_verify_nonce(sanitize_text_field($_POST['bbb_edit_server_settings_meta_nonce']), 'bbb_edit_server_settings_meta_nonce')) {
-			$bbb_url = sanitize_text_field($_POST['bbb_url']);
-			$bbb_salt = sanitize_text_field($_POST['bbb_salt']);
+	private function room_server_settings_change() {
+		if ( ! empty( $_POST['action'] ) && 'bbb_general_settings' == $_POST['action'] && wp_verify_nonce( sanitize_text_field( $_POST['bbb_edit_server_settings_meta_nonce'] ), 'bbb_edit_server_settings_meta_nonce' ) ) {
+			$bbb_url  = sanitize_text_field( $_POST['bbb_url'] );
+			$bbb_salt = sanitize_text_field( $_POST['bbb_salt'] );
 
-			$bbb_url .= (substr($bbb_url, -1) == '/' ? '' : '/');
+			$bbb_url .= ( substr( $bbb_url, -1 ) == '/' ? '' : '/' );
 
-			if (!Bigbluebutton_Api::test_bigbluebutton_server($bbb_url, $bbb_salt)) {
+			if ( ! Bigbluebutton_Api::test_bigbluebutton_server( $bbb_url, $bbb_salt ) ) {
 				return 3;
 			}
 
-			if (substr_compare($bbb_url, 'bigbluebutton/', strlen($bbb_url) - 14) !== 0) {
+			if ( substr_compare( $bbb_url, 'bigbluebutton/', strlen( $bbb_url ) - 14 ) !== 0 ) {
 				return 2;
 			}
 
-			update_option('bigbluebutton_url', $bbb_url);
-			update_option('bigbluebutton_salt', $bbb_salt);
+			update_option( 'bigbluebutton_url', $bbb_url );
+			update_option( 'bigbluebutton_salt', $bbb_salt );
 
 			return 1;
 		}
@@ -322,12 +309,11 @@ class Bigbluebutton_Admin
 	 *
 	 * @since   3.0.0
 	 */
-	public function check_for_heartbeat_script()
-	{
+	public function check_for_heartbeat_script() {
 		$bbb_warning_type = 'bbb-missing-heartbeat-api-notice';
-		if (!wp_script_is('heartbeat', 'registered') && !get_option('dismissed-' . $bbb_warning_type, false)) {
-			$bbb_admin_warning_message = __('BigBlueButton works best with the heartbeat API enabled. Please enable it.', 'bigbluebutton');
-			$bbb_admin_notice_nonce = wp_create_nonce($bbb_warning_type);
+		if ( ! wp_script_is( 'heartbeat', 'registered' ) && ! get_option( 'dismissed-' . $bbb_warning_type, false ) ) {
+			$bbb_admin_warning_message = __( 'BigBlueButton works best with the heartbeat API enabled. Please enable it.', 'bigbluebutton' );
+			$bbb_admin_notice_nonce    = wp_create_nonce( $bbb_warning_type );
 			require 'partials/bigbluebutton-warning-admin-notice-display.php';
 		}
 	}
@@ -335,28 +321,27 @@ class Bigbluebutton_Admin
 	/**
 	 * Hide others rooms if user does not have permission to edit them.
 	 *
-	 * @param Object $query Query so far.
-	 * @return Object $query   Query for rooms.
 	 * @since  3.0.0
 	 *
+	 * @param  Object $query   Query so far.
+	 * @return Object $query   Query for rooms.
 	 */
-	public function filter_rooms_list($query)
-	{
+	public function filter_rooms_list( $query ) {
 		global $pagenow;
 
-		if ('edit.php' != $pagenow || !$query->is_admin || 'bbb-room' != $query->query_vars['post_type']) {
+		if ( 'edit.php' != $pagenow || ! $query->is_admin || 'bbb-room' != $query->query_vars['post_type'] ) {
 			return $query;
 		}
 
-		if (!current_user_can('edit_others_bbb_rooms')) {
-			$query->set('author', get_current_user_id());
+		if ( ! current_user_can( 'edit_others_bbb_rooms' ) ) {
+			$query->set( 'author', get_current_user_id() );
 		}
 		return $query;
 	}
 
 	public function add_acf_fields()
 	{
-		if (function_exists('acf_add_local_field_group')):
+		if( function_exists('acf_add_local_field_group') ):
 
 			$fields = array(
 				'key' => 'group_5ed41e5b73a6a',
@@ -404,11 +389,11 @@ class Bigbluebutton_Admin
 						'type' => 'text',
 						'instructions' => 'Eine Besprechungs-ID, die zur Identifizierung dieser Besprechung durch die 3rd-Party-Anwendung verwendet werden kann.
 
-Diese muss für den Server, den Sie anrufen, eindeutig sein: Verschiedene aktive Besprechungen können nicht dieselbe Besprechungs-ID haben.
+				Diese muss für den Server, den Sie anrufen, eindeutig sein: Verschiedene aktive Besprechungen können nicht dieselbe Besprechungs-ID haben.
 
-Wenn Sie eine nicht eindeutige Besprechungs-ID angeben (es läuft bereits eine Besprechung mit derselben Besprechungs-ID), dann ist der Aufruf zum Erstellen erfolgreich, wenn die anderen Parameter im Aufruf zum Erstellen identisch sind (in der Antwort wird jedoch eine Warnmeldung angezeigt). Der Erstellungsaufruf ist idempotent: mehrmaliges Aufrufen hat keine Nebenwirkung. Auf diese Weise kann eine Drittanbieter-Anwendung die Überprüfung vermeiden, ob die Besprechung läuft, und immer vor dem Beitritt zu jedem Benutzer einen Anruf erstellen.
+				Wenn Sie eine nicht eindeutige Besprechungs-ID angeben (es läuft bereits eine Besprechung mit derselben Besprechungs-ID), dann ist der Aufruf zum Erstellen erfolgreich, wenn die anderen Parameter im Aufruf zum Erstellen identisch sind (in der Antwort wird jedoch eine Warnmeldung angezeigt). Der Erstellungsaufruf ist idempotent: mehrmaliges Aufrufen hat keine Nebenwirkung. Auf diese Weise kann eine Drittanbieter-Anwendung die Überprüfung vermeiden, ob die Besprechung läuft, und immer vor dem Beitritt zu jedem Benutzer einen Anruf erstellen.
 
-Besprechungs-IDs sollten nur ASCII-Groß-/Kleinbuchstaben, Zahlen, Bindestriche oder Unterstriche enthalten. Eine gute Wahl für die Besprechungs-ID ist es, einen GUID-Wert zu generieren, da dies alles garantiert, dass verschiedene Besprechungen nicht die gleiche Besprechungs-ID haben.',
+				Besprechungs-IDs sollten nur ASCII-Groß-/Kleinbuchstaben, Zahlen, Bindestriche oder Unterstriche enthalten. Eine gute Wahl für die Besprechungs-ID ist es, einen GUID-Wert zu generieren, da dies alles garantiert, dass verschiedene Besprechungen nicht die gleiche Besprechungs-ID haben.',
 						'required' => 1,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -485,8 +470,8 @@ Besprechungs-IDs sollten nur ASCII-Groß-/Kleinbuchstaben, Zahlen, Bindestriche 
 						'name' => 'bbb_welcome',
 						'type' => 'wysiwyg',
 						'instructions' => 'Eine Begrüßungsnachricht, die im Chat-Fenster angezeigt wird, wenn der Teilnehmer beitritt. Sie können Schlüsselwörter einschließen (%%CONFNAME%%%, %%DIALNUM%%%, %%CONFNUM%%%), die automatisch ersetzt werden.
-Dieser Parameter setzt die StandardeinstellungWelcomeMessage in bigbluebutton.properties außer Kraft.
-Die Begrüßungsnachricht hat eine begrenzte Unterstützung für HTML-Formatierung. Seien Sie vorsichtig mit dem Kopieren/Einfügen von HTML aus z.B. MS Word, da es leicht die maximal unterstützte URL-Länge überschreiten kann, wenn es bei einer GET-Anfrage verwendet wird.',
+				Dieser Parameter setzt die StandardeinstellungWelcomeMessage in bigbluebutton.properties außer Kraft.
+				Die Begrüßungsnachricht hat eine begrenzte Unterstützung für HTML-Formatierung. Seien Sie vorsichtig mit dem Kopieren/Einfügen von HTML aus z.B. MS Word, da es leicht die maximal unterstützte URL-Länge überschreiten kann, wenn es bei einer GET-Anfrage verwendet wird.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -496,11 +481,11 @@ Die Begrüßungsnachricht hat eine begrenzte Unterstützung für HTML-Formatieru
 						),
 						'default_value' => 'Herzlich willkommen zu %%CONFNAME%%!
 
-Um der Konferenz per Audio beizutreten, klicken Sie auf den Telefon-Button. Verwenden Sie ein Headset, um Hintergrundgeräusche für andere zu vermeiden.
+				Um der Konferenz per Audio beizutreten, klicken Sie auf den Telefon-Button. Verwenden Sie ein Headset, um Hintergrundgeräusche für andere zu vermeiden.
 
-Falls Sie Hilfe bei der Verwendung dieser Videokonferenz benötigen, klicken Sie <a href="https://quorato.de/" target="_blank" rel="noopener">hier</a>.
+				Falls Sie Hilfe bei der Verwendung dieser Videokonferenz benötigen, klicken Sie <a href="https://quorato.de/" target="_blank" rel="noopener">hier</a>.
 
-Diese Konferenz wird bereitgetellt von <a href="https://quorato.de/" target="_blank" rel="noopener">quorato</a> mit der Software <a href="https://bigbluebutton.org/" target="_blank" rel="noopener">BigBlueButton</a>.',
+				Diese Konferenz wird bereitgetellt von <a href="https://quorato.de/" target="_blank" rel="noopener">quorato</a> mit der Software <a href="https://bigbluebutton.org/" target="_blank" rel="noopener">BigBlueButton</a>.',
 						'tabs' => 'all',
 						'toolbar' => 'basic',
 						'media_upload' => 0,
@@ -513,7 +498,7 @@ Diese Konferenz wird bereitgetellt von <a href="https://quorato.de/" target="_bl
 						'type' => 'wysiwyg',
 						'instructions' => 'Anzeige einer Nachricht an alle Moderatoren im öffentlichen Chat.
 
-Der Wert wird auf die gleiche Weise interpretiert wie der Begrüßungsparameter.',
+				Der Wert wird auf die gleiche Weise interpretiert wie der Begrüßungsparameter.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -522,7 +507,7 @@ Der Wert wird auf die gleiche Weise interpretiert wie der Begrüßungsparameter.
 							'id' => '',
 						),
 						'default_value' => 'Sie sind Moderator dieser Konferenz.
-Bitte holen Sie sich Feedback bei den Benutzern',
+				Bitte holen Sie sich Feedback bei den Benutzern',
 						'tabs' => 'all',
 						'toolbar' => 'basic',
 						'media_upload' => 0,
@@ -561,11 +546,11 @@ Bitte holen Sie sich Feedback bei den Benutzern',
 						'type' => 'number',
 						'instructions' => 'Nummer der Sprachkonferenz für die FreeSWITCH-Sprachkonferenz im Zusammenhang mit dieser Sitzung. Dies muss eine 5-stellige Nummer im Bereich 10000 bis 99999 sein. Wenn Sie Ihrem BigBlueButton-Server eine Telefonnummer hinzufügen, legt dieser Parameter die persönliche Identifikationsnummer (PIN) fest, zu deren Eingabe FreeSWITCH einen Nur-Telefon-Benutzer auffordert. Wenn Sie diesen Bereich ändern möchten, bearbeiten Sie den FreeSWITCH-Wahlplan und defaultNumDigitsForTelVoice von bigbluebutton.properties.
 
-Die VoiceBridge-Nummer muss für jede Besprechung unterschiedlich sein.
+				Die VoiceBridge-Nummer muss für jede Besprechung unterschiedlich sein.
 
-Dieser Parameter ist optional. Wenn Sie keine voiceBridge-Nummer angeben, weist BigBlueButton eine zufällige, nicht verwendete Nummer für das Meeting zu.
+				Dieser Parameter ist optional. Wenn Sie keine voiceBridge-Nummer angeben, weist BigBlueButton eine zufällige, nicht verwendete Nummer für das Meeting zu.
 
-Wenn Sie eine VoiceBridge-Nummer übergeben, dann müssen Sie sicherstellen, dass jede Besprechung eine eindeutige VoiceBridge-Nummer hat; andernfalls führt die Wiederverwendung derselben VoiceBridge-Nummer für zwei verschiedene Besprechungen dazu, dass Benutzer aus der einen Besprechung als Telefonbenutzer in der anderen Besprechung erscheinen, was für Benutzer in beiden Besprechungen sehr verwirrend ist.',
+				Wenn Sie eine VoiceBridge-Nummer übergeben, dann müssen Sie sicherstellen, dass jede Besprechung eine eindeutige VoiceBridge-Nummer hat; andernfalls führt die Wiederverwendung derselben VoiceBridge-Nummer für zwei verschiedene Besprechungen dazu, dass Benutzer aus der einen Besprechung als Telefonbenutzer in der anderen Besprechung erscheinen, was für Benutzer in beiden Besprechungen sehr verwirrend ist.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -624,7 +609,7 @@ Wenn Sie eine VoiceBridge-Nummer übergeben, dann müssen Sie sicherstellen, das
 						'type' => 'true_false',
 						'instructions' => 'Die Einstellung \'record=true\' weist den BigBlueButton-Server an, die Medien und Ereignisse in der Sitzung für die spätere Wiedergabe aufzuzeichnen. Die Voreinstellung ist falsch.
 
-Damit eine Wiedergabedatei erzeugt werden kann, muss ein Moderator während der Sitzung mindestens einmal auf die Schaltfläche Start/Stop Recording klicken; andernfalls werden die Aufnahme- und Wiedergabeskripte, wenn keine Aufnahmemarkierungen vorhanden sind, keine Wiedergabedatei erzeugen. Siehe auch die Parameter autoStartRecording und allowStartStopRecording in bigbluebutton.properties.',
+				Damit eine Wiedergabedatei erzeugt werden kann, muss ein Moderator während der Sitzung mindestens einmal auf die Schaltfläche Start/Stop Recording klicken; andernfalls werden die Aufnahme- und Wiedergabeskripte, wenn keine Aufnahmemarkierungen vorhanden sind, keine Wiedergabedatei erzeugen. Siehe auch die Parameter autoStartRecording und allowStartStopRecording in bigbluebutton.properties.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -645,8 +630,8 @@ Damit eine Wiedergabedatei erzeugt werden kann, muss ein Moderator während der 
 						'type' => 'true_false',
 						'instructions' => 'Ob die Aufzeichnung automatisch gestartet werden soll, wenn der erste Benutzer beitritt (Voreinstellung falsch).
 
-Wenn dieser Parameter wahr ist, wird die Aufnahme-UI in BigBlueButton anfänglich aktiv sein. Moderatoren in der Sitzung können die Aufzeichnung immer noch mit der UI-Steuerung pausieren und neu starten.<br/
-HINWEIS: Übergeben Sie autoStartRecording=false nicht und erlauben SieStartStopRecording=false - der Moderator kann dann die Aufzeichnung nicht starten!',
+				Wenn dieser Parameter wahr ist, wird die Aufnahme-UI in BigBlueButton anfänglich aktiv sein. Moderatoren in der Sitzung können die Aufzeichnung immer noch mit der UI-Steuerung pausieren und neu starten.<br/
+				HINWEIS: Übergeben Sie autoStartRecording=false nicht und erlauben SieStartStopRecording=false - der Moderator kann dann die Aufzeichnung nicht starten!',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -667,7 +652,7 @@ HINWEIS: Übergeben Sie autoStartRecording=false nicht und erlauben SieStartStop
 						'type' => 'true_false',
 						'instructions' => 'Erlauben Sie dem Benutzer, die Aufzeichnung zu starten/stoppen. (Voreinstellung true)
 
-Wenn Sie sowohl allowStartStopRecording=false als auch autoStartRecording=true setzen, dann wird die gesamte Länge der Sitzung aufgezeichnet, und die Moderatoren in der Sitzung können die Aufzeichnung nicht anhalten/fortsetzen.',
+				Wenn Sie sowohl allowStartStopRecording=false als auch autoStartRecording=true setzen, dann wird die gesamte Länge der Sitzung aufgezeichnet, und die Moderatoren in der Sitzung können die Aufzeichnung nicht anhalten/fortsetzen.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -688,9 +673,9 @@ Wenn Sie sowohl allowStartStopRecording=false als auch autoStartRecording=true s
 						'type' => 'range',
 						'instructions' => 'Die maximale Dauer (in Minuten) für die Sitzung.
 
-Normalerweise beendet der BigBlueButton-Server die Besprechung, wenn entweder (a) die letzte Person die Besprechung verlässt (es dauert ein oder zwei Minuten, bis der Server die Besprechung aus dem Speicher löscht) oder wenn der Server eine End-API-Anforderung mit der zugehörigen MeetingID erhält (jeder wird gekickt und die Besprechung wird sofort aus dem Speicher gelöscht).
+				Normalerweise beendet der BigBlueButton-Server die Besprechung, wenn entweder (a) die letzte Person die Besprechung verlässt (es dauert ein oder zwei Minuten, bis der Server die Besprechung aus dem Speicher löscht) oder wenn der Server eine End-API-Anforderung mit der zugehörigen MeetingID erhält (jeder wird gekickt und die Besprechung wird sofort aus dem Speicher gelöscht).
 
-BigBlueButton beginnt mit der Verfolgung der Länge einer Besprechung, wenn diese erstellt wird. Wenn die Dauer einen Wert ungleich Null enthält, beendet der Server die Besprechung sofort, wenn die Länge der Besprechung den Wert der Dauer überschreitet (entspricht dem Empfang einer End-API-Anforderung zu diesem Zeitpunkt).',
+				BigBlueButton beginnt mit der Verfolgung der Länge einer Besprechung, wenn diese erstellt wird. Wenn die Dauer einen Wert ungleich Null enthält, beendet der Server die Besprechung sofort, wenn die Länge der Besprechung den Wert der Dauer überschreitet (entspricht dem Empfang einer End-API-Anforderung zu diesem Zeitpunkt).',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1084,8 +1069,8 @@ BigBlueButton beginnt mit der Verfolgung der Länge einer Besprechung, wenn dies
 						'name' => 'bbb_guestPolicy',
 						'type' => 'select',
 						'instructions' => 'Standard-Gast-Richtlinie:
-Legt die Gästerichtlinie für die Besprechung fest. Die Guest-Richtlinie legt fest, ob Benutzer, die eine Beitrittsanfrage mit guest=true senden, der Besprechung beitreten dürfen oder nicht.
-Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
+				Legt die Gästerichtlinie für die Besprechung fest. Die Guest-Richtlinie legt fest, ob Benutzer, die eine Beitrittsanfrage mit guest=true senden, der Besprechung beitreten dürfen oder nicht.
+				Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1499,8 +1484,8 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 						'name' => 'bbb_cc_disableRecordingDefault',
 						'type' => 'true_false',
 						'instructions' => 'Die Aufzeichnung ist standardmäßig deaktiviert:
-- true: nicht aufzeichnen, auch wenn der Parameter record param im api-Aufruf auf Aufzeichnung eingestellt ist
-- false: wenn ein Datensatz-Param von api übergeben wird, überschreiben Sie diese Vorgabe',
+				- true: nicht aufzeichnen, auch wenn der Parameter record param im api-Aufruf auf Aufzeichnung eingestellt ist
+				- false: wenn ein Datensatz-Param von api übergeben wird, überschreiben Sie diese Vorgabe',
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1871,30 +1856,6 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 						'ui' => 1,
 						'ui_on_text' => '',
 						'ui_off_text' => '',
-					),
-					array(
-						'key' => 'field_5ed435145dbba',
-						'label' => 'custom_style_url',
-						'name' => 'bbb_ud_custom_style_url',
-						'type' => 'url',
-						'instructions' => '',
-						'required' => 0,
-						'conditional_logic' => array(
-							array(
-								array(
-									'field' => 'field_5ed434865dbb9',
-									'operator' => '==',
-									'value' => '1',
-								),
-							),
-						),
-						'wrapper' => array(
-							'width' => '',
-							'class' => '',
-							'id' => '',
-						),
-						'default_value' => 'https://forcase.de/BBB/Forcase.css',
-						'placeholder' => 'https://forcase.de/BBB/Forcase.css',
 					),
 					array(
 						'key' => 'field_5ed451e5de2f3',
@@ -2656,6 +2617,7 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 				'description' => '',
 			);
 
+
 			$colors = [
 				'--color-white' => '#FFF',
 				'--color-off-white' => '#eaeef1',
@@ -2694,7 +2656,15 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 				'type' => 'tab',
 				'instructions' => '',
 				'required' => 0,
-				'conditional_logic' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_5ed434865dbb9',
+							'operator' => '==',
+							'value' => '1',
+						),
+					),
+				),
 				'wrapper' => array(
 					'width' => '',
 					'class' => '',
@@ -2704,15 +2674,86 @@ Gültige Werte sind ALWAYS_ACCEPT, ALWAYS_DENY, ASK_MODERATOR.',
 				'endpoint' => 0,
 			);
 
+			$fields['fields'][] = array(
+				'key' => 'field_bbb_is_picker',
+				'label' => 'is-picker',
+				'name' => 'ci_is-picker',
+				'type' => 'true_false',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_5ed434865dbb9',
+							'operator' => '==',
+							'value' => '1',
+						),
+					),
+				),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'message' => '',
+				'default_value' => 0,
+				'ui' => 1,
+				'ui_on_text' => 'Live',
+				'ui_off_text' => 'Datei',
+			);
+
+			$fields['fields'][] = array(
+				'key' => 'field_bbb_custom_style_url',
+				'label' => 'custom_style_url',
+				'name' => 'bbb_ud_custom_style_url',
+				'type' => 'url',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field' => 'field_5ed434865dbb9',
+							'operator' => '==',
+							'value' => '1',
+						),
+						array(
+							'field' => 'field_bbb_is_picker',
+							'operator' => '!=',
+							'value' => '1',
+						),
+					),
+				),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => 'https://forcase.de/BBB/Forcase.css',
+				'placeholder' => 'https://forcase.de/BBB/Forcase.css',
+			);
+
 			foreach ($colors as $key => $default_value) {
 				$fields['fields'][] = array(
 					'key' => 'field_bbb' . $key,
 					'label' => $key,
 					'name' => 'bbb_' . $key,
-					'type' => 'color_picker',
+					'type' => 'extended-color-picker',
 					'instructions' => '',
 					'required' => 0,
-					'conditional_logic' => 0,
+					'conditional_logic' => array(
+						array(
+							array(
+								'field' => 'field_5ed434865dbb9',
+								'operator' => '==',
+								'value' => '1',
+							),
+							array(
+								'field' => 'field_bbb_is_picker',
+								'operator' => '==',
+								'value' => '1',
+							),
+						),
+					),
 					'wrapper' => array(
 						'width' => '',
 						'class' => '',
