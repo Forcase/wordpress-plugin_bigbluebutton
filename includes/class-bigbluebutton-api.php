@@ -40,15 +40,6 @@ class Bigbluebutton_Api
 			return 404;
 		}
 
-		// todo: process params from acf
-
-		$name = html_entity_decode(get_the_title($rid));
-		$moderator_code = get_post_meta($rid, 'bbb-room-moderator-code', true);
-		$viewer_code = get_post_meta($rid, 'bbb-room-viewer-code', true);
-		$recordable = get_post_meta($rid, 'bbb-room-recordable', true);
-		$meeting_id = get_field('bbb_meetingID', $rid);
-		$welcome_message = get_field('welcome_message', $rid);
-
 		$create_params = self::get_bbb_create_params();
 
 		$req_create_params = self::get_acf_req_params($rid, $create_params, 'bbb_');
