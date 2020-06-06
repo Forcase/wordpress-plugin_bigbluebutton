@@ -55,18 +55,21 @@ class Bigbluebutton_Api
 
 		$config_params = self::get_bbb_config_params();
 
-		$req_config_params = self::get_acf_req_params($rid, $config_params, 'bbb_cc_', '');
+		// not sure yet how to use these
+//		$req_config_params = self::get_acf_req_params($rid, $config_params, 'bbb_cc_', '');
+		$req_config_params = [];
 
 		$user_params = self::get_bbb_user_params();
 
-		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
+		// probably only needed on join
+//		$req_user_params = self::get_acf_req_params($rid, $user_params, 'bbb_ud_', 'userdata-bbb_');
+		$req_user_params = [];
 
-		$meta1 = [
-		];
+		$meta_params = self::get_bbb_meta_params();
 
-		$req_meta1_params = self::get_acf_req_params($rid, $meta1, 'bbb_meta_', 'meta_bbb-');
+		$req_meta_params = self::get_acf_req_params($rid, $meta_params, 'bbb_meta_', 'meta_bbb-');
 
-		$req_params = array_merge($req_user_params, $req_config_params, $req_create_params, [
+		$req_params = array_merge($req_user_params, $req_config_params, $req_meta_params, $req_create_params, [
 			'joinViaHtml5' => 'true',
 			'guest' => get_field('bbb_join_guest', $room_id) ? 'true' : 'false',
 		]);
@@ -102,22 +105,23 @@ class Bigbluebutton_Api
 
 	}
 
-	public static function get_acf_req_params($room_id, $params, $acf_prefix, $req_prefix='') {
+	public static function get_acf_req_params($room_id, $params, $acf_prefix, $req_prefix = '')
+	{
 		$req_params = [];
 		foreach ($params as $param) {
 			$field = get_field_object($acf_prefix . $param, $room_id);
-			if(!$field) {
+			if (!$field) {
 				// error
 				continue;
 			}
 			$type = $field['type'];
 			$value = get_field($acf_prefix . $param, $room_id);
-			if(!empty($value) || $type == 'true_false'){
-				if($type == 'url') {
+			if (!empty($value) || $type == 'true_false') {
+				if ($type == 'url') {
 					$value = esc_url($value);
-				} elseif(is_string($value)) {
+				} elseif (is_string($value)) {
 					$value = rawurlencode($value);
-				} elseif(is_bool($value)) {
+				} elseif (is_bool($value)) {
 					$value = $value ? 'true' : 'false';
 				}
 				$req_params[$req_prefix . $param] = $value;
@@ -126,7 +130,8 @@ class Bigbluebutton_Api
 		return $req_params;
 	}
 
-	public static function get_bbb_user_params() {
+	public static function get_bbb_user_params()
+	{
 		return [
 			// APP
 			'ask_for_feedback_on_logout',
@@ -162,7 +167,8 @@ class Bigbluebutton_Api
 		];
 	}
 
-	public static function get_bbb_create_params() {
+	public static function get_bbb_create_params()
+	{
 		return [
 			'meetingID',
 			'name',
@@ -202,7 +208,8 @@ class Bigbluebutton_Api
 		];
 	}
 
-	public static function get_bbb_config_params() {
+	public static function get_bbb_config_params()
+	{
 		return [
 			'defaultMaxUsers',
 			'defaultMeetingDuration',
@@ -230,6 +237,11 @@ class Bigbluebutton_Api
 //			'lockSettingsLockOnJoin',
 //			'lockSettingsLockOnJoinConfigurable',
 		];
+	}
+
+	public static function get_bbb_meta_params()
+	{
+		return [];
 	}
 
 	/**
@@ -279,7 +291,7 @@ class Bigbluebutton_Api
 		$custom_style_params = [];
 
 		// todo: not working as expected
-		if(get_field('ci_is-picker', $room_id) == true) {
+		if (get_field('ci_is-picker', $room_id) == true) {
 			$custom_style_params = [
 				'userdata-bbb_custom_style' => 'true',
 				'userdata-bbb_custom_style_url' => admin_url('admin-post.php') . '?action=generate_room_css&rid=' . $room_id
