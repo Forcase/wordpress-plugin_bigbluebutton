@@ -318,7 +318,7 @@ class Bigbluebutton {
 
 		// Generate CSS
 		$this->loader->add_action( 'admin_post_generate_room_css', $plugin_public, 'generate_room_css' );
-		$this->loader->add_action( 'admin_post_generate_room_css', $plugin_public, 'generate_room_css' );
+		$this->loader->add_action( 'admin_post_nopriv_generate_room_css', $plugin_public, 'generate_room_css' );
 
 		// Manage recording state API.
 		$this->loader->add_action( 'wp_ajax_set_bbb_recording_publish_state', $plugin_public_recording_api, 'set_bbb_recording_publish_state' );
