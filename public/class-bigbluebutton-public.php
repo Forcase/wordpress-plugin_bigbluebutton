@@ -140,6 +140,31 @@ class Bigbluebutton_Public {
 		require 'bigbluebutton-styles.css.php';
 	}
 
+	public function frontend_create_room()
+	{
+		// todo: check nonce
+
+		// todo: check user capabilities and owner
+
+		// check max rooms
+		// process acf fields
+		// redirect to edit rooms with success message
+		// or redirect back with failure message
+
+		$name = $_POST['room_name'] ?? '';
+		// todo: ID for updating existing room
+
+		 $post_id = wp_insert_post([
+		 	'post_type' => 'bbb-room',
+		 	'post_title' => sanitize_text_field($name),
+			 'post_status' => 'publish'
+		 ]);
+		// if no error, do acf part
+		 update_field('bbb_name', sanitize_text_field($name), $post_id);
+
+		 wp_redirect($_SERVER['HTTP_REFERER']);
+	}
+
 	/**
 	 * Enqueues dashicon icons for use on front end.
 	 *
