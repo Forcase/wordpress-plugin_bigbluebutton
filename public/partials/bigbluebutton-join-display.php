@@ -90,7 +90,7 @@ if (isset($_SESSION[$room_id . '-livestream']) && $_SESSION[$room_id . '-livestr
 						<?php echo get_field('bbb_wp_privacy-policy', $room_id) ?: __("Hiermit akzeptiere ich die Datenschutzrichtline.", "bigbluebutton"); ?>
 					</label>
 					<?php endif; ?>
-					<?php if (get_field('bbb_wp_recording-policy_required', $room_id) && get_field('bbb_record', $room_id) || get_field('bbb_autoStartRecording', $room_id)): ?>
+					<?php if (get_field('bbb_wp_recording-policy_required', $room_id) && (get_field('bbb_record', $room_id) || get_field('bbb_autoStartRecording', $room_id))): ?>
 						<label for="bbb_accept_recording_policy">
 							<input id="bbb_accept_recording_policy" type="checkbox"
 								   name="bbb_accept_recording_policy" <?php echo isset($_REQUEST['bbb_accept_recording_policy']) ? 'checked' : ''; ?>>
