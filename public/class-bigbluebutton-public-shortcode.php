@@ -106,17 +106,56 @@ class Bigbluebutton_Public_Shortcode
 		}
 	}
 
+	public function get_max_rooms(){
+		$active_memberships = wc_memberships_get_user_active_memberships();
+		$memberships = wc_memberships_get_user_memberships();
+		// do something to evaluate the right type of memberships
+		if(!empty($memberships)){
+			$membership = $memberships[0];
+			// active membership
+			$is_active = $membership->get_status() === 'active';
+			$is_active2 = $membership->is_active() === true;
+
+			$max_rooms = $this->get_max_rooms();
+
+		}
+
+		$membership_plan = $membership->get_plan();
+		$plan_id = $membership_plan->get_id();
+
+		return (int) get_field('max_rooms', $plan_id);
+	}
+
 	public function display_bigbluebutton_rooms_shortcode($atts = [], $content = null)
 	{
+		// todo: display the contens of this shortcode only to active subscriptions
 		// todo: query rooms created by the current user and output them as a list with link to room
+
+		// todo: build helper function for each restricted feature display shortcode
+		$my_romms_post_id = 5;
+//		$can_access_my_rooms = ! current_user_can( 'wc_memberships_view_restricted_post_content', $post_id );
+		// todo: handler for status change
+		// action: 'wc_memberships_user_membership_status_changed membership, old_status, new_status
 
 		$query = new WP_Query([
 			'post_type' => 'bbb-room',
 			'author' => get_current_user_id()
 		]);
+		$count = $query->post_count;
+
+		// do some tests here
+
+
 
 		ob_start();
 
+		?>
+
+		<?php if($max_rooms): ?>
+	Räume: <?php echo $count; ?> von <?php echo $max_rooms; ?>
+		<?php endif; ?>
+
+		<?php
 		while ($query->have_posts()):
 			$query->the_post();
 			?>
