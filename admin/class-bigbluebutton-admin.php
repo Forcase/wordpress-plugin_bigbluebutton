@@ -339,6 +339,233 @@ class Bigbluebutton_Admin {
 		return $query;
 	}
 
+	public function add_memberships_group($field_groups)
+	{
+		if(!is_admin())
+			return $field_groups;
+
+		if(acfe_is_admin_screen())
+			return $field_groups;
+
+		$current_user_roles = acfe_get_current_user_roles();
+
+		foreach($field_groups as $key => $field_group){
+
+			if(!acf_maybe_get($field_group, 'acfe_permissions'))
+				continue;
+
+			$render_field_group = false;
+
+			foreach($current_user_roles as $current_user_role){
+
+				foreach($field_group['acfe_permissions'] as $field_group_role){
+
+					if($current_user_role !== $field_group_role)
+						continue;
+
+					$render_field_group = true;
+					break;
+
+				}
+
+				if($render_field_group)
+					break;
+
+			}
+
+			if(!$render_field_group)
+				unset($field_groups[$key]);
+
+		}
+
+		return $field_groups;
+	}
+
+	/**
+	 * @param $field
+	 * @hook acf/load_field_groups
+	 */
+	public function add_memberships_field_settings($field)
+	{
+		// Settings
+		acf_render_field_setting($field, array(
+			'label'         => __('Permissions'),
+			'name'          => 'acfe_permissions',
+			'key'           => 'acfe_permissions',
+			'instructions'  => __('Select user roles that are allowed to view and edit this field. If nothing is selected, then this field will be available to everyone.'),
+			'type'          => 'checkbox',
+			'required'      => false,
+			'default_value' => false,
+			'choices'       => acfe_get_roles(),
+			'layout'        => 'horizontal'
+		), true);
+	}
+
+	/**
+	 * Render this membership fields group only for users that have
+	 * the selected membership levels
+	 *
+	 * @hook acf/load_field_groups
+	 * @param $field_groups
+	 * @return mixed
+	 *
+	 */
+	public function memberships_field_groups($field_groups)
+	{
+		// todo: check this as we need this on frontend as well for non admin users
+		if(current_user_can('administrator')) {
+			return $field_groups;
+		}
+
+		// todo: get user membership levels
+		$user_membership_levels = $this->get_user_memberships();
+
+		foreach($field_groups as $key => $field_group){
+
+			if(!acf_maybe_get($field_group, 'acf_lx_memberships'))
+				continue;
+
+			$render_field_group = false;
+
+				// todo: get user membership levels
+			foreach($user_membership_levels as $user_membership_level){
+
+			// todo: get field group membership levels
+				foreach($field_group['acf_lx_memberships'] as $field_group_membership_level){
+
+					if($user_membership_level !== $field_group_membership_level)
+						continue;
+
+					$render_field_group = true;
+					break;
+
+				}
+
+				if($render_field_group)
+					break;
+
+			}
+
+			if(!$render_field_group)
+				unset($field_groups[$key]);
+
+		}
+
+		return $field_groups;
+
+
+	}
+
+	/**
+	 * @hook acf/field_group/admin_head
+	 */
+	public function add_memberships_field_group_settings()
+	{
+		$instance = $this;
+
+		add_meta_box('acf-field-group-memberships', __("Membership settings", "acf"), function () use ($instance) {
+			// Global
+			global $field_group;
+
+			// Proxy
+			$_field_group = $field_group;
+
+			acf_render_field_wrap(array(
+				'label'         => __('Permissions'),
+				'name'          => 'acf_lx_memberships',
+				'prefix'        => 'acf_field_group',
+				'type'          => 'checkbox',
+				'instructions'	=> __('Select user roles that are allowed to view and edit this field group in post edition'),
+				'required'      => false,
+				'default_value' => false,
+				'choices'       => $instance->get_memberships(),
+				'value'         => (isset($field_group['acf_lx_memberships'])) ? $field_group['acf_lx_memberships'] : array(),
+				'layout'        => 'vertical'
+			));
+		}, 'acf-field-group', 'side');
+
+		// todo:
+	}
+
+	public function get_memberships()
+	{
+		// todo: get woocommerce membership levels
+		$plans =  wc_memberships_get_membership_plans();
+		$memberships = [];
+		foreach ($plans as $plan) {
+			$memberships["" . $plan->get_id()] = $plan->get_name();
+		}
+		return $memberships;
+	}
+
+	public function get_user_memberships()
+	{
+		$plans =  wc_memberships_get_user_active_memberships();
+		$memberships = [];
+		foreach ($plans as $plan) {
+			$memberships[] = "" . $plan->get_plan_id();
+		}
+		return $memberships;
+	}
+	/**
+	 * @hook acf/render_field_settings - 999
+	 */
+	public function memberships_field_settings($field)
+	{
+		// Settings
+		acf_render_field_setting($field, array(
+			'label'         => __('Membership Levels'),
+			'name'          => 'acf_lx_memberships',
+			'key'           => 'acf_lx_memberships',
+			'instructions'  => __('Select user roles that are allowed to view and edit this field. If nothing is selected, then this field will be available to everyone.'),
+			'type'          => 'checkbox',
+			'required'      => false,
+			'default_value' => false,
+			'choices'       => $this->get_memberships(),
+			'layout'        => 'horizontal'
+		), true);
+	}
+
+	/**
+	 * @hook acf/prepare_field
+	 * @param $field
+	 */
+	public function memberships_prepare_field($field)
+	{
+		if(current_user_can('administrator')) {
+			return $field;
+		}
+
+		if(!isset($field['acf_lx_memberships']) || empty($field['acf_lx_memberships']))
+			return $field;
+
+		// todo: get current users memberships levels
+		$current_user_memberships = $this->get_user_memberships();
+		$render_field = false;
+
+		foreach($current_user_memberships as $current_user_membership){
+
+			foreach($field['acf_lx_memberships'] as $field_memberships){
+
+				if($current_user_membership !== $field_memberships)
+					continue;
+
+				$render_field = true;
+				break;
+
+			}
+
+			if($render_field)
+				break;
+
+		}
+
+		if(!$render_field)
+			return false;
+
+		return $field;
+	}
+
 	public function add_acf_fields()
 	{
 		if( function_exists('acf_add_local_field_group') ):

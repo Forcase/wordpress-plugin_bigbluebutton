@@ -96,7 +96,7 @@ class Bigbluebutton_Api
 
 	}
 
-	public static function get_acf_req_params($room_id, $params, $acf_prefix, $req_prefix = '')
+	public static function get_acf_req_params($room_id, $params, $acf_prefix = 'bbb_', $req_prefix = '')
 	{
 		$req_params = [];
 		foreach ($params as $param) {
